@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <environments default="desarrollo">
+        <environment id="desarrollo">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="${db.url}"/>
+                <property name="username" value="${db.username}"/>
+                <property name="password" value="${db.password}"/>
+                <property name="poolMaximumActiveConnections" value="50"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="modelo/mybatis/mapper/UsuarioMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/AdministradorMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/MedicoMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/PacienteMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/DietaMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/CitaMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/ConsultaMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/AlimentoMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/DietaAlimentoMapper.xml"/>
+    </mappers>
+</configuration>

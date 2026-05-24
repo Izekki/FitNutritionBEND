@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dieta">
+    <resultMap id="dietaMap" type="pojo.Dieta">
+        <id property="idDieta" column="idDieta"/>
+        <result property="nombreDieta" column="nombreDieta"/>
+        <result property="caloriasTotales" column="caloriasTotales"/>
+        <result property="descripcion" column="descripcion"/>
+        <result property="estatusEdicion" column="estatusEdicion"/>
+    </resultMap>
+
+    <select id="listar" resultMap="dietaMap">
+        SELECT idDieta, nombreDieta, caloriasTotales, descripcion, estatusEdicion
+        FROM dieta
+        ORDER BY idDieta
+    </select>
+
+    <select id="obtenerPorId" parameterType="int" resultMap="dietaMap">
+        SELECT idDieta, nombreDieta, caloriasTotales, descripcion, estatusEdicion
+        FROM dieta
+        WHERE idDieta = #{idDieta}
+    </select>
+
+    <insert id="insertar" parameterType="pojo.Dieta" useGeneratedKeys="true" keyProperty="idDieta" keyColumn="idDieta">
+        INSERT INTO dieta (nombreDieta, caloriasTotales, descripcion, estatusEdicion)
+        VALUES (#{nombreDieta}, #{caloriasTotales}, #{descripcion}, #{estatusEdicion})
+    </insert>
+
+    <update id="actualizar" parameterType="pojo.Dieta">
+        UPDATE dieta
+        SET nombreDieta = #{nombreDieta},
+            caloriasTotales = #{caloriasTotales},
+            descripcion = #{descripcion},
+            estatusEdicion = #{estatusEdicion}
+        WHERE idDieta = #{idDieta}
+    </update>
+
+    <delete id="eliminar" parameterType="int">
+        DELETE FROM dieta
+        WHERE idDieta = #{idDieta}
+    </delete>
+</mapper>

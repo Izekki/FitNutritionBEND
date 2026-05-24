@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="consulta">
+    <resultMap id="consultaMap" type="pojo.Consulta">
+        <id property="idConsulta" column="idConsulta"/>
+        <result property="idPaciente" column="idPaciente"/>
+        <result property="idMedico" column="idMedico"/>
+        <result property="idCita" column="idCita"/>
+        <result property="idDieta" column="idDieta"/>
+        <result property="fecha" column="fecha"/>
+        <result property="pesoCapturado" column="pesoCapturado"/>
+        <result property="tallaCapturada" column="tallaCapturada"/>
+        <result property="imcCalculado" column="imcCalculado"/>
+        <result property="observaciones" column="observaciones"/>
+    </resultMap>
+
+    <select id="listar" resultMap="consultaMap">
+        SELECT idConsulta, idPaciente, idMedico, idCita, idDieta, fecha, pesoCapturado, tallaCapturada, imcCalculado, observaciones
+        FROM consulta
+        ORDER BY idConsulta
+    </select>
+
+    <select id="obtenerPorId" parameterType="int" resultMap="consultaMap">
+        SELECT idConsulta, idPaciente, idMedico, idCita, idDieta, fecha, pesoCapturado, tallaCapturada, imcCalculado, observaciones
+        FROM consulta
+        WHERE idConsulta = #{idConsulta}
+    </select>
+
+    <insert id="insertar" parameterType="pojo.Consulta" useGeneratedKeys="true" keyProperty="idConsulta" keyColumn="idConsulta">
+        INSERT INTO consulta (idPaciente, idMedico, idCita, idDieta, fecha, pesoCapturado, tallaCapturada, imcCalculado, observaciones)
+        VALUES (#{idPaciente}, #{idMedico}, #{idCita}, #{idDieta}, #{fecha}, #{pesoCapturado}, #{tallaCapturada}, #{imcCalculado}, #{observaciones})
+    </insert>
+
+    <update id="actualizar" parameterType="pojo.Consulta">
+        UPDATE consulta
+        SET idPaciente = #{idPaciente},
+            idMedico = #{idMedico},
+            idCita = #{idCita},
+            idDieta = #{idDieta},
+            fecha = #{fecha},
+            pesoCapturado = #{pesoCapturado},
+            tallaCapturada = #{tallaCapturada},
+            imcCalculado = #{imcCalculado},
+            observaciones = #{observaciones}
+        WHERE idConsulta = #{idConsulta}
+    </update>
+
+    <delete id="eliminar" parameterType="int">
+        DELETE FROM consulta
+        WHERE idConsulta = #{idConsulta}
+    </delete>
+</mapper>

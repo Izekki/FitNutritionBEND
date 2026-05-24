@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="usuario">
+    <resultMap id="usuarioMap" type="pojo.Usuario">
+        <id property="idUsuario" column="idUsuario"/>
+        <result property="password" column="password"/>
+        <result property="rol" column="rol"/>
+        <result property="estatus" column="estatus"/>
+    </resultMap>
+
+    <select id="listar" resultMap="usuarioMap">
+        SELECT idUsuario, password, rol, estatus
+        FROM usuario
+        ORDER BY idUsuario
+    </select>
+
+    <select id="obtenerPorId" parameterType="int" resultMap="usuarioMap">
+        SELECT idUsuario, password, rol, estatus
+        FROM usuario
+        WHERE idUsuario = #{idUsuario}
+    </select>
+
+    <select id="autenticar" parameterType="pojo.Usuario" resultMap="usuarioMap">
+        SELECT idUsuario, password, rol, estatus
+        FROM usuario
+        WHERE idUsuario = #{idUsuario}
+          AND password = #{password}
+          AND estatus = TRUE
+    </select>
+
+    <insert id="insertar" parameterType="pojo.Usuario" useGeneratedKeys="true" keyProperty="idUsuario" keyColumn="idUsuario">
+        INSERT INTO usuario (password, rol, estatus)
+        VALUES (#{password}, #{rol}, #{estatus})
+    </insert>
+
+    <update id="actualizar" parameterType="pojo.Usuario">
+        UPDATE usuario
+        SET password = #{password},
+            rol = #{rol},
+            estatus = #{estatus}
+        WHERE idUsuario = #{idUsuario}
+    </update>
+
+    <delete id="eliminar" parameterType="int">
+        DELETE FROM usuario
+        WHERE idUsuario = #{idUsuario}
+    </delete>
+</mapper>

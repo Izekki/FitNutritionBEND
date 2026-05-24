@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cita">
+    <resultMap id="citaMap" type="pojo.Cita">
+        <id property="idCita" column="idCita"/>
+        <result property="idPaciente" column="idPaciente"/>
+        <result property="idMedico" column="idMedico"/>
+        <result property="fecha" column="fecha"/>
+        <result property="hora" column="hora"/>
+        <result property="estado" column="estado"/>
+        <result property="observaciones" column="observaciones"/>
+    </resultMap>
+
+    <select id="listar" resultMap="citaMap">
+        SELECT idCita, idPaciente, idMedico, fecha, hora, estado, observaciones
+        FROM cita
+        ORDER BY idCita
+    </select>
+
+    <select id="obtenerPorId" parameterType="int" resultMap="citaMap">
+        SELECT idCita, idPaciente, idMedico, fecha, hora, estado, observaciones
+        FROM cita
+        WHERE idCita = #{idCita}
+    </select>
+
+    <insert id="insertar" parameterType="pojo.Cita" useGeneratedKeys="true" keyProperty="idCita" keyColumn="idCita">
+        INSERT INTO cita (idPaciente, idMedico, fecha, hora, estado, observaciones)
+        VALUES (#{idPaciente}, #{idMedico}, #{fecha}, #{hora}, #{estado}, #{observaciones})
+    </insert>
+
+    <update id="actualizar" parameterType="pojo.Cita">
+        UPDATE cita
+        SET idPaciente = #{idPaciente},
+            idMedico = #{idMedico},
+            fecha = #{fecha},
+            hora = #{hora},
+            estado = #{estado},
+            observaciones = #{observaciones}
+        WHERE idCita = #{idCita}
+    </update>
+
+    <delete id="eliminar" parameterType="int">
+        DELETE FROM cita
+        WHERE idCita = #{idCita}
+    </delete>
+</mapper>
