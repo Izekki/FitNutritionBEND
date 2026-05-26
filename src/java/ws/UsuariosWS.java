@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import pojo.Usuario;
+import pojo.Paciente;
 import utilidades.Constantes;
 
 @Path("autenticacion")
@@ -86,5 +87,14 @@ public class UsuariosWS {
             throw new BadRequestException("Se requieren idUsuario y password");
         }
         return AutenticacionImp.autenticarUsuario(credenciales);
+    }
+
+    @POST
+    @Path("ingresar-movil")
+    public RSAutenticacionUsuario ingresarMovil(Paciente credenciales) {
+        if (credenciales == null || credenciales.getCodigoAcceso() == null) {
+            throw new BadRequestException("Se requiere codigoAcceso");
+        }
+        return AutenticacionImp.autenticarPacienteMovil(credenciales.getCodigoAcceso());
     }
 }

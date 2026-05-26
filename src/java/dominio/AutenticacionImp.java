@@ -6,6 +6,7 @@ import java.util.UUID;
 import modelo.mybatis.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Usuario;
+import pojo.Paciente;
 import utilidades.Constantes;
 
 public class AutenticacionImp {
@@ -106,6 +107,42 @@ public class AutenticacionImp {
             try {
                 Usuario usuario = conexionBD.selectOne("usuario.autenticar", credenciales);
                 if (usuario == null) {
+                    respuesta.setMensaje(Constantes.MSJ_CREDENCIALES_INVALIDAS);
+                    return respuesta;
+                }
+                respuesta.setError(false);
+                respuesta.setMensaje(Constantes.MSJ_ACCESO_CONCEDIDO);
+                respuesta.setToken(UUID.randomUUID().toString());
+                respuesta.setUsuario(usuario);
+                return respuesta;
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        respuesta.setMensaje(Constantes.MSJ_ERROR_BD);
+        return respuesta;
+    }
+
+    public static RSAutenticacionUsuario autenticarPacienteMovil(String codigoAcceso) {
+        RSAutenticacionUsuario respuesta = new RSAutenticacionUsuario();
+        respuesta.setError(true);
+
+        if (codigoAcceso == null || codigoAcceso.trim().isEmpty()) {
+            respuesta.setMensaje(Constantes.MSJ_CREDENCIALES_INVALIDAS);
+            return respuesta;
+        }
+
+        SqlSession conexionBD = MybatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                Paciente paciente = conexionBD.selectOne("paciente.obtenerPorCodigoAcceso", codigoAcceso);
+                if (paciente == null) {
+                    respuesta.setMensaje(Constantes.MSJ_CREDENCIALES_INVALIDAS);
+                    return respuesta;
+                }
+                Usuario usuario = obtenerUsuario(paciente.getIdUsuario());
+                if (usuario == null || usuario.getEstatus() == null || !usuario.getEstatus()) {
                     respuesta.setMensaje(Constantes.MSJ_CREDENCIALES_INVALIDAS);
                     return respuesta;
                 }
