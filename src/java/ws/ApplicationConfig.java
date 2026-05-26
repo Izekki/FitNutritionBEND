@@ -20,14 +20,14 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(ws.UsuariosWS.class);
+        resources.add(ws.AdministradoresWS.class);
         resources.add(ws.CatalogosNutricionalesWS.class);
-        resources.add(ws.PacientesWS.class);
-        resources.add(ws.MedicosWS.class);
         resources.add(ws.CitasWS.class);
         resources.add(ws.ConsultasWS.class);
-        resources.add(ws.AdministradoresWS.class);
         resources.add(ws.DietaAlimentosWS.class);
+        resources.add(ws.MedicosWS.class);
+        resources.add(ws.PacientesWS.class);
+        resources.add(ws.UsuariosWS.class);
     }
 
 }
