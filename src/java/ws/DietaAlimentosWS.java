@@ -1,6 +1,6 @@
 package ws;
 
-import dominio.UnidadImp;
+import dominio.DietaAlimentoImp;
 import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
@@ -24,7 +24,7 @@ public class DietaAlimentosWS {
 
     @GET
     public List<DietaAlimento> listarRelaciones() {
-        return UnidadImp.listarDietasAlimentos();
+        return DietaAlimentoImp.listarDietasAlimentos();
     }
 
     @GET
@@ -33,7 +33,7 @@ public class DietaAlimentosWS {
         if (idDietaAlimento == null || idDietaAlimento <= 0) {
             throw new BadRequestException("ID de relación requerido");
         }
-        DietaAlimento relacion = UnidadImp.obtenerDietaAlimento(idDietaAlimento);
+        DietaAlimento relacion = DietaAlimentoImp.obtenerDietaAlimento(idDietaAlimento);
         if (relacion == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null)).build();
@@ -47,7 +47,7 @@ public class DietaAlimentosWS {
         if (idDieta == null || idDieta <= 0) {
             throw new BadRequestException("ID de dieta requerido");
         }
-        return UnidadImp.listarPorDieta(idDieta);
+        return DietaAlimentoImp.listarPorDieta(idDieta);
     }
 
     @GET
@@ -56,7 +56,7 @@ public class DietaAlimentosWS {
         if (idAlimento == null || idAlimento <= 0) {
             throw new BadRequestException("ID de alimento requerido");
         }
-        return UnidadImp.listarPorAlimento(idAlimento);
+        return DietaAlimentoImp.listarPorAlimento(idAlimento);
     }
 
     @POST
@@ -64,7 +64,7 @@ public class DietaAlimentosWS {
         if (dietaAlimento == null) {
             throw new BadRequestException("Relación requerida");
         }
-        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, UnidadImp.guardarDietaAlimento(dietaAlimento));
+        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, DietaAlimentoImp.guardarDietaAlimento(dietaAlimento));
     }
 
     @PUT
@@ -74,7 +74,7 @@ public class DietaAlimentosWS {
         if (idDietaAlimento == null || idDietaAlimento <= 0 || dietaAlimento == null) {
             throw new BadRequestException("Datos inválidos");
         }
-        DietaAlimento actualizada = UnidadImp.actualizarDietaAlimento(idDietaAlimento, dietaAlimento);
+        DietaAlimento actualizada = DietaAlimentoImp.actualizarDietaAlimento(idDietaAlimento, dietaAlimento);
         if (actualizada == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
@@ -87,7 +87,7 @@ public class DietaAlimentosWS {
         if (idDietaAlimento == null || idDietaAlimento <= 0) {
             throw new BadRequestException("ID de relación requerido");
         }
-        DietaAlimento eliminada = UnidadImp.eliminarDietaAlimento(idDietaAlimento);
+        DietaAlimento eliminada = DietaAlimentoImp.eliminarDietaAlimento(idDietaAlimento);
         if (eliminada == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }

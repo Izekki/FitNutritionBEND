@@ -1,6 +1,6 @@
 package ws;
 
-import dominio.PaqueteImp;
+import dominio.ConsultaImp;
 import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
@@ -24,7 +24,7 @@ public class ConsultasWS {
 
     @GET
     public List<Consulta> listarConsultas() {
-        return PaqueteImp.listarConsultas();
+        return ConsultaImp.listarConsultas();
     }
 
     @GET
@@ -33,7 +33,7 @@ public class ConsultasWS {
         if (idConsulta == null || idConsulta <= 0) {
             throw new BadRequestException("ID de consulta requerido");
         }
-        Consulta consulta = PaqueteImp.obtenerConsulta(idConsulta);
+        Consulta consulta = ConsultaImp.obtenerConsulta(idConsulta);
         if (consulta == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null)).build();
@@ -46,7 +46,7 @@ public class ConsultasWS {
         if (consulta == null) {
             throw new BadRequestException("Consulta requerida");
         }
-        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, PaqueteImp.guardarConsulta(consulta));
+        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, ConsultaImp.guardarConsulta(consulta));
     }
 
     @PUT
@@ -55,7 +55,7 @@ public class ConsultasWS {
         if (idConsulta == null || idConsulta <= 0 || consulta == null) {
             throw new BadRequestException("Datos inválidos");
         }
-        Consulta actualizada = PaqueteImp.actualizarConsulta(idConsulta, consulta);
+        Consulta actualizada = ConsultaImp.actualizarConsulta(idConsulta, consulta);
         if (actualizada == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
@@ -68,7 +68,7 @@ public class ConsultasWS {
         if (idConsulta == null || idConsulta <= 0) {
             throw new BadRequestException("ID de consulta requerido");
         }
-        Consulta eliminada = PaqueteImp.eliminarConsulta(idConsulta);
+        Consulta eliminada = ConsultaImp.eliminarConsulta(idConsulta);
         if (eliminada == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }

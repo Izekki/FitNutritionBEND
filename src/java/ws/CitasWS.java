@@ -1,6 +1,6 @@
 package ws;
 
-import dominio.EnvioImp;
+import dominio.CitaImp;
 import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
@@ -24,7 +24,7 @@ public class CitasWS {
 
     @GET
     public List<Cita> listarCitas() {
-        return EnvioImp.listarCitas();
+        return CitaImp.listarCitas();
     }
 
     @GET
@@ -33,7 +33,7 @@ public class CitasWS {
         if (idCita == null || idCita <= 0) {
             throw new BadRequestException("ID de cita requerido");
         }
-        Cita cita = EnvioImp.obtenerCita(idCita);
+        Cita cita = CitaImp.obtenerCita(idCita);
         if (cita == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null)).build();
@@ -46,7 +46,7 @@ public class CitasWS {
         if (cita == null) {
             throw new BadRequestException("Cita requerida");
         }
-        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, EnvioImp.guardarCita(cita));
+        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, CitaImp.guardarCita(cita));
     }
 
     @PUT
@@ -55,7 +55,7 @@ public class CitasWS {
         if (idCita == null || idCita <= 0 || cita == null) {
             throw new BadRequestException("Datos inválidos");
         }
-        Cita actualizada = EnvioImp.actualizarCita(idCita, cita);
+        Cita actualizada = CitaImp.actualizarCita(idCita, cita);
         if (actualizada == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
@@ -68,7 +68,7 @@ public class CitasWS {
         if (idCita == null || idCita <= 0) {
             throw new BadRequestException("ID de cita requerido");
         }
-        Cita eliminada = EnvioImp.eliminarCita(idCita);
+        Cita eliminada = CitaImp.eliminarCita(idCita);
         if (eliminada == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }

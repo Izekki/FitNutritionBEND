@@ -1,6 +1,6 @@
 package ws;
 
-import dominio.ClienteImp;
+import dominio.PacienteImp;
 import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
@@ -24,7 +24,7 @@ public class PacientesWS {
 
     @GET
     public List<Paciente> listarPacientes() {
-        return ClienteImp.listarPacientes();
+        return PacienteImp.listarPacientes();
     }
 
     @GET
@@ -33,7 +33,7 @@ public class PacientesWS {
         if (idPaciente == null || idPaciente <= 0) {
             throw new BadRequestException("ID de paciente requerido");
         }
-        Paciente paciente = ClienteImp.obtenerPaciente(idPaciente);
+        Paciente paciente = PacienteImp.obtenerPaciente(idPaciente);
         if (paciente == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null)).build();
@@ -46,7 +46,7 @@ public class PacientesWS {
         if (paciente == null) {
             throw new BadRequestException("Paciente requerido");
         }
-        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, ClienteImp.guardarPaciente(paciente));
+        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, PacienteImp.guardarPaciente(paciente));
     }
 
     @PUT
@@ -55,7 +55,7 @@ public class PacientesWS {
         if (idPaciente == null || idPaciente <= 0 || paciente == null) {
             throw new BadRequestException("Datos inválidos");
         }
-        Paciente actualizado = ClienteImp.actualizarPaciente(idPaciente, paciente);
+        Paciente actualizado = PacienteImp.actualizarPaciente(idPaciente, paciente);
         if (actualizado == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
@@ -68,7 +68,7 @@ public class PacientesWS {
         if (idPaciente == null || idPaciente <= 0) {
             throw new BadRequestException("ID de paciente requerido");
         }
-        Paciente eliminado = ClienteImp.eliminarPaciente(idPaciente);
+        Paciente eliminado = PacienteImp.eliminarPaciente(idPaciente);
         if (eliminado == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }

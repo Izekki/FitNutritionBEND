@@ -1,6 +1,6 @@
 package ws;
 
-import dominio.ColaboradorImp;
+import dominio.MedicoImp;
 import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
@@ -24,7 +24,7 @@ public class MedicosWS {
 
     @GET
     public List<Medico> listarMedicos() {
-        return ColaboradorImp.listarMedicos();
+        return MedicoImp.listarMedicos();
     }
 
     @GET
@@ -33,7 +33,7 @@ public class MedicosWS {
         if (idMedico == null || idMedico <= 0) {
             throw new BadRequestException("ID de médico requerido");
         }
-        Medico medico = ColaboradorImp.obtenerMedico(idMedico);
+        Medico medico = MedicoImp.obtenerMedico(idMedico);
         if (medico == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null)).build();
@@ -46,7 +46,7 @@ public class MedicosWS {
         if (medico == null) {
             throw new BadRequestException("Médico requerido");
         }
-        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, ColaboradorImp.guardarMedico(medico));
+        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, MedicoImp.guardarMedico(medico));
     }
 
     @PUT
@@ -55,7 +55,7 @@ public class MedicosWS {
         if (idMedico == null || idMedico <= 0 || medico == null) {
             throw new BadRequestException("Datos inválidos");
         }
-        Medico actualizado = ColaboradorImp.actualizarMedico(idMedico, medico);
+        Medico actualizado = MedicoImp.actualizarMedico(idMedico, medico);
         if (actualizado == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
@@ -68,7 +68,7 @@ public class MedicosWS {
         if (idMedico == null || idMedico <= 0) {
             throw new BadRequestException("ID de médico requerido");
         }
-        Medico eliminado = ColaboradorImp.eliminarMedico(idMedico);
+        Medico eliminado = MedicoImp.eliminarMedico(idMedico);
         if (eliminado == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }

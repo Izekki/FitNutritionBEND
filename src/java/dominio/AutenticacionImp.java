@@ -1,6 +1,6 @@
 package dominio;
 
-import dto.RSAutenticacionColaborador;
+import dto.RSAutenticacionUsuario;
 import java.util.List;
 import java.util.UUID;
 import modelo.mybatis.MybatisUtil;
@@ -92,8 +92,8 @@ public class AutenticacionImp {
         return null;
     }
 
-    public static RSAutenticacionColaborador autenticarUsuario(Usuario credenciales) {
-        RSAutenticacionColaborador respuesta = new RSAutenticacionColaborador();
+    public static RSAutenticacionUsuario autenticarUsuario(Usuario credenciales) {
+        RSAutenticacionUsuario respuesta = new RSAutenticacionUsuario();
         respuesta.setError(true);
 
         if (credenciales == null || credenciales.getIdUsuario() == null || credenciales.getPassword() == null) {

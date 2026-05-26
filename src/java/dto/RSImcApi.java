@@ -1,16 +1,16 @@
 package dto;
 
-public class RSDistanciaApi {
+public class RSImcApi {
 
     private boolean error;
     private String mensaje;
     private Double imc;
     private String clasificacion;
 
-    public RSDistanciaApi() {
+    public RSImcApi() {
     }
 
-    public RSDistanciaApi(boolean error, String mensaje, Double imc, String clasificacion) {
+    public RSImcApi(boolean error, String mensaje, Double imc, String clasificacion) {
         this.error = error;
         this.mensaje = mensaje;
         this.imc = imc;

@@ -3,56 +3,56 @@ package dominio;
 import java.util.List;
 import modelo.mybatis.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
-import pojo.Medico;
+import pojo.Administrador;
 
-public class ColaboradorImp {
+public class AdministradorImp {
 
-    public static List<Medico> listarMedicos() {
-        List<Medico> medicos = null;
+    public static List<Administrador> listarAdministradores() {
+        List<Administrador> administradores = null;
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                medicos = conexionBD.selectList("medico.listar");
+                administradores = conexionBD.selectList("administrador.listar");
             } finally {
                 conexionBD.close();
             }
         }
-        return medicos;
+        return administradores;
     }
 
-    public static Medico obtenerMedico(Integer idMedico) {
-        Medico medico = null;
+    public static Administrador obtenerAdministrador(Integer idAdministrador) {
+        Administrador administrador = null;
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                medico = conexionBD.selectOne("medico.obtenerPorId", idMedico);
+                administrador = conexionBD.selectOne("administrador.obtenerPorId", idAdministrador);
             } finally {
                 conexionBD.close();
             }
         }
-        return medico;
+        return administrador;
     }
 
-    public static Medico obtenerMedicoPorUsuario(Integer idUsuario) {
-        Medico medico = null;
+    public static Administrador obtenerAdministradorPorUsuario(Integer idUsuario) {
+        Administrador administrador = null;
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                medico = conexionBD.selectOne("medico.obtenerPorUsuario", idUsuario);
+                administrador = conexionBD.selectOne("administrador.obtenerPorUsuario", idUsuario);
             } finally {
                 conexionBD.close();
             }
         }
-        return medico;
+        return administrador;
     }
 
-    public static Medico guardarMedico(Medico medico) {
+    public static Administrador guardarAdministrador(Administrador administrador) {
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                conexionBD.insert("medico.insertar", medico);
+                conexionBD.insert("administrador.insertar", administrador);
                 conexionBD.commit();
-                return medico;
+                return administrador;
             } catch (Exception e) {
                 conexionBD.rollback();
                 throw new RuntimeException(e);
@@ -63,14 +63,14 @@ public class ColaboradorImp {
         return null;
     }
 
-    public static Medico actualizarMedico(Integer idMedico, Medico medico) {
+    public static Administrador actualizarAdministrador(Integer idAdministrador, Administrador administrador) {
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                medico.setIdMedico(idMedico);
-                int filas = conexionBD.update("medico.actualizar", medico);
+                administrador.setIdAdministrador(idAdministrador);
+                int filas = conexionBD.update("administrador.actualizar", administrador);
                 conexionBD.commit();
-                return filas > 0 ? medico : null;
+                return filas > 0 ? administrador : null;
             } catch (Exception e) {
                 conexionBD.rollback();
                 throw new RuntimeException(e);
@@ -81,17 +81,17 @@ public class ColaboradorImp {
         return null;
     }
 
-    public static Medico eliminarMedico(Integer idMedico) {
-        Medico medico = obtenerMedico(idMedico);
-        if (medico == null) {
+    public static Administrador eliminarAdministrador(Integer idAdministrador) {
+        Administrador administrador = obtenerAdministrador(idAdministrador);
+        if (administrador == null) {
             return null;
         }
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                conexionBD.delete("medico.eliminar", idMedico);
+                conexionBD.delete("administrador.eliminar", idAdministrador);
                 conexionBD.commit();
-                return medico;
+                return administrador;
             } catch (Exception e) {
                 conexionBD.rollback();
                 throw new RuntimeException(e);

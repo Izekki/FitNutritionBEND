@@ -6,7 +6,7 @@ import modelo.mybatis.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.DietaAlimento;
 
-public class UnidadImp {
+public class DietaAlimentoImp {
 
     public static List<DietaAlimento> listarDietasAlimentos() {
         List<DietaAlimento> relaciones = null;

@@ -5,7 +5,7 @@ import modelo.mybatis.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Cita;
 
-public class EnvioImp {
+public class CitaImp {
 
     public static List<Cita> listarCitas() {
         List<Cita> citas = null;

@@ -1,7 +1,7 @@
 package ws;
 
 import dominio.AutenticacionImp;
-import dto.RSAutenticacionColaborador;
+import dto.RSAutenticacionUsuario;
 import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
@@ -81,7 +81,7 @@ public class UsuariosWS {
 
     @POST
     @Path("ingresar")
-    public RSAutenticacionColaborador ingresar(Usuario credenciales) {
+    public RSAutenticacionUsuario ingresar(Usuario credenciales) {
         if (credenciales == null || credenciales.getIdUsuario() == null || credenciales.getPassword() == null) {
             throw new BadRequestException("Se requieren idUsuario y password");
         }

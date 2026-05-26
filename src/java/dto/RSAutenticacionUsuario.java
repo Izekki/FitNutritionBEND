@@ -1,45 +1,18 @@
 package dto;
 
-import pojo.Colaborador;
-
-public class RSAutenticacionColaborador {
-    private Boolean error;
-    private String mensaje;
-    private Colaborador colaborador;
-    private String token;
-
-    public RSAutenticacionColaborador() {
-}
-
-public RSAutenticacionColaborador(Boolean error, String mensaje, Colaborador colaborador, String token) {
-        this.error = error;
-        this.mensaje = mensaje;
-        this.colaborador = colaborador;
-        package dto;
-
 import pojo.Usuario;
 
-public class RSAutenticacionColaborador {
-
-private boolean error;
-private String mensaje;
-private String token;
-package dto
-;
-
-import pojo.Usuario;
-
-public class RSAutenticacionColaborador {
+public class RSAutenticacionUsuario {
 
     private boolean error;
     private String mensaje;
     private String token;
     private Usuario usuario;
 
-    public RSAutenticacionColaborador() {
+    public RSAutenticacionUsuario() {
     }
 
-    public RSAutenticacionColaborador(boolean error, String mensaje, String token, Usuario usuario) {
+    public RSAutenticacionUsuario(boolean error, String mensaje, String token, Usuario usuario) {
         this.error = error;
         this.mensaje = mensaje;
         this.token = token;

@@ -3,56 +3,47 @@ package dominio;
 import java.util.List;
 import modelo.mybatis.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
-import pojo.Paciente;
+import pojo.Consulta;
+import utilidades.Utilidades;
 
-public class ClienteImp {
+public class ConsultaImp {
 
-    public static List<Paciente> listarPacientes() {
-        List<Paciente> pacientes = null;
+    public static List<Consulta> listarConsultas() {
+        List<Consulta> consultas = null;
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                pacientes = conexionBD.selectList("paciente.listar");
+                consultas = conexionBD.selectList("consulta.listar");
             } finally {
                 conexionBD.close();
             }
         }
-        return pacientes;
+        return consultas;
     }
 
-    public static Paciente obtenerPaciente(Integer idPaciente) {
-        Paciente paciente = null;
+    public static Consulta obtenerConsulta(Integer idConsulta) {
+        Consulta consulta = null;
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                paciente = conexionBD.selectOne("paciente.obtenerPorId", idPaciente);
+                consulta = conexionBD.selectOne("consulta.obtenerPorId", idConsulta);
             } finally {
                 conexionBD.close();
             }
         }
-        return paciente;
+        return consulta;
     }
 
-    public static Paciente obtenerPacientePorUsuario(Integer idUsuario) {
-        Paciente paciente = null;
-        SqlSession conexionBD = MybatisUtil.getSession();
-        if (conexionBD != null) {
-            try {
-                paciente = conexionBD.selectOne("paciente.obtenerPorUsuario", idUsuario);
-            } finally {
-                conexionBD.close();
-            }
+    public static Consulta guardarConsulta(Consulta consulta) {
+        if (consulta != null && consulta.getImcCalculado() == null) {
+            consulta.setImcCalculado(Utilidades.calcularImc(consulta.getPesoCapturado(), consulta.getTallaCapturada()));
         }
-        return paciente;
-    }
-
-    public static Paciente guardarPaciente(Paciente paciente) {
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                conexionBD.insert("paciente.insertar", paciente);
+                conexionBD.insert("consulta.insertar", consulta);
                 conexionBD.commit();
-                return paciente;
+                return consulta;
             } catch (Exception e) {
                 conexionBD.rollback();
                 throw new RuntimeException(e);
@@ -63,14 +54,17 @@ public class ClienteImp {
         return null;
     }
 
-    public static Paciente actualizarPaciente(Integer idPaciente, Paciente paciente) {
+    public static Consulta actualizarConsulta(Integer idConsulta, Consulta consulta) {
+        if (consulta != null && consulta.getImcCalculado() == null) {
+            consulta.setImcCalculado(Utilidades.calcularImc(consulta.getPesoCapturado(), consulta.getTallaCapturada()));
+        }
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                paciente.setIdPaciente(idPaciente);
-                int filas = conexionBD.update("paciente.actualizar", paciente);
+                consulta.setIdConsulta(idConsulta);
+                int filas = conexionBD.update("consulta.actualizar", consulta);
                 conexionBD.commit();
-                return filas > 0 ? paciente : null;
+                return filas > 0 ? consulta : null;
             } catch (Exception e) {
                 conexionBD.rollback();
                 throw new RuntimeException(e);
@@ -81,17 +75,17 @@ public class ClienteImp {
         return null;
     }
 
-    public static Paciente eliminarPaciente(Integer idPaciente) {
-        Paciente paciente = obtenerPaciente(idPaciente);
-        if (paciente == null) {
+    public static Consulta eliminarConsulta(Integer idConsulta) {
+        Consulta consulta = obtenerConsulta(idConsulta);
+        if (consulta == null) {
             return null;
         }
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                conexionBD.delete("paciente.eliminar", idPaciente);
+                conexionBD.delete("consulta.eliminar", idConsulta);
                 conexionBD.commit();
-                return paciente;
+                return consulta;
             } catch (Exception e) {
                 conexionBD.rollback();
                 throw new RuntimeException(e);

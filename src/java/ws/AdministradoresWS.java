@@ -1,6 +1,6 @@
 package ws;
 
-import dominio.SucursalImp;
+import dominio.AdministradorImp;
 import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
@@ -24,7 +24,7 @@ public class AdministradoresWS {
 
     @GET
     public List<Administrador> listarAdministradores() {
-        return SucursalImp.listarAdministradores();
+        return AdministradorImp.listarAdministradores();
     }
 
     @GET
@@ -33,7 +33,7 @@ public class AdministradoresWS {
         if (idAdministrador == null || idAdministrador <= 0) {
             throw new BadRequestException("ID de administrador requerido");
         }
-        Administrador administrador = SucursalImp.obtenerAdministrador(idAdministrador);
+        Administrador administrador = AdministradorImp.obtenerAdministrador(idAdministrador);
         if (administrador == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null)).build();
@@ -46,7 +46,7 @@ public class AdministradoresWS {
         if (administrador == null) {
             throw new BadRequestException("Administrador requerido");
         }
-        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, SucursalImp.guardarAdministrador(administrador));
+        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, AdministradorImp.guardarAdministrador(administrador));
     }
 
     @PUT
@@ -56,7 +56,7 @@ public class AdministradoresWS {
         if (idAdministrador == null || idAdministrador <= 0 || administrador == null) {
             throw new BadRequestException("Datos inválidos");
         }
-        Administrador actualizado = SucursalImp.actualizarAdministrador(idAdministrador, administrador);
+        Administrador actualizado = AdministradorImp.actualizarAdministrador(idAdministrador, administrador);
         if (actualizado == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
@@ -69,7 +69,7 @@ public class AdministradoresWS {
         if (idAdministrador == null || idAdministrador <= 0) {
             throw new BadRequestException("ID de administrador requerido");
         }
-        Administrador eliminado = SucursalImp.eliminarAdministrador(idAdministrador);
+        Administrador eliminado = AdministradorImp.eliminarAdministrador(idAdministrador);
         if (eliminado == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
