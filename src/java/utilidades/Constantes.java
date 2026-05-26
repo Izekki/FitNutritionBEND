@@ -14,6 +14,8 @@ public class Constantes {
     public static final String ESTATUS_INACTIVO = "Inactivo";
     public static final String ESTATUS_EDITABLE = "Editable";
     public static final String ESTATUS_BLOQUEADA = "Bloqueada";
+    public static String MSJ_ACCESO_CONCEDIDO = "Bienvenido a Fit Nutrition";
+    public static String MSJ_CREDENCIALES_INVALIDAS = "Creedenciales incorrectas revise nuevamente";
 
     private Constantes() {
     }

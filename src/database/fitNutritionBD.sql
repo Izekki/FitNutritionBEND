@@ -178,7 +178,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- ----------------------------
 
 INSERT INTO usuario (password, rol, estatus) 
-VALUES ('hash_admin_123', 'Administrador', TRUE), ('hash_medico_123', 'Medico', TRUE), ('hash_paciente_123', 'Paciente', TRUE);
+VALUES (SHA2('admin123',256), 'Administrador', TRUE), (SHA2('medico123',256), 'Medico', TRUE), (SHA2('paciente123',256), 'Paciente', TRUE);
 
 INSERT INTO administrador (idUsuario) 
 VALUES (1);
