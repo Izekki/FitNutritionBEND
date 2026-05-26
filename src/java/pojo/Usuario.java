@@ -3,6 +3,7 @@ package pojo;
 public class Usuario {
     private Integer idUsuario;
     private String password;
+    private String login;
     private String rol;
     private Boolean estatus;
 
@@ -14,6 +15,14 @@ public class Usuario {
         this.password = password;
         this.rol = rol;
         this.estatus = estatus;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public Integer getIdUsuario() {

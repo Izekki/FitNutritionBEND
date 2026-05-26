@@ -83,8 +83,8 @@ public class UsuariosWS {
     @POST
     @Path("ingresar")
     public RSAutenticacionUsuario ingresar(Usuario credenciales) {
-        if (credenciales == null || credenciales.getIdUsuario() == null || credenciales.getPassword() == null) {
-            throw new BadRequestException("Se requieren idUsuario y password");
+        if (credenciales == null || (credenciales.getIdUsuario() == null && credenciales.getLogin() == null) || credenciales.getPassword() == null) {
+            throw new BadRequestException("Se requieren idUsuario/login y password");
         }
         return AutenticacionImp.autenticarUsuario(credenciales);
     }

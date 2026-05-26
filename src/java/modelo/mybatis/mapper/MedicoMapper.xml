@@ -39,6 +39,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE idUsuario = #{idUsuario}
     </select>
 
+    <select id="obtenerPorEmail" parameterType="string" resultMap="medicoMap">
+        SELECT idMedico, idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
+               fechaNacimiento, genero, email, telefono, domicilio, fotografia
+        FROM medico
+        WHERE email = #{email}
+    </select>
+
     <insert id="insertar" parameterType="pojo.Medico" useGeneratedKeys="true" keyProperty="idMedico" keyColumn="idMedico">
         INSERT INTO medico (idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
                             fechaNacimiento, genero, email, telefono, domicilio, fotografia)
