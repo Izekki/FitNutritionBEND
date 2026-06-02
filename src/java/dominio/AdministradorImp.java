@@ -19,7 +19,7 @@ public class AdministradorImp {
         }
         return administradores;
     }
-
+    
     public static Administrador obtenerAdministrador(Integer idAdministrador) {
         Administrador administrador = null;
         SqlSession conexionBD = MybatisUtil.getSession();
