@@ -2,7 +2,6 @@ package pojo;
 
 public class Paciente {
     private Integer idPaciente;
-    private Integer idUsuario;
     private Integer idMedico;
     private String nombrePaciente;
     private String apellidosPaciente;
@@ -20,11 +19,10 @@ public class Paciente {
     public Paciente() {
     }
 
-    public Paciente(Integer idPaciente, Integer idUsuario, Integer idMedico, String nombrePaciente,
+    public Paciente(Integer idPaciente, Integer idMedico, String nombrePaciente,
             String apellidosPaciente, String fechaNacimiento, String genero, Double peso, Double estatura, Double talla,
             String email, String telefono, String domicilio, String fotografia, String codigoAcceso) {
         this.idPaciente = idPaciente;
-        this.idUsuario = idUsuario;
         this.idMedico = idMedico;
         this.nombrePaciente = nombrePaciente;
         this.apellidosPaciente = apellidosPaciente;
@@ -46,14 +44,6 @@ public class Paciente {
 
     public void setIdPaciente(Integer idPaciente) {
         this.idPaciente = idPaciente;
-    }
-
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
     }
 
     public Integer getIdMedico() {

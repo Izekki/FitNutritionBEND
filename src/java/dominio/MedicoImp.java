@@ -4,6 +4,7 @@ import java.util.List;
 import modelo.mybatis.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Medico;
+import utilidades.Utilidades;
 
 public class MedicoImp {
 
@@ -33,23 +34,13 @@ public class MedicoImp {
         return medico;
     }
 
-    public static Medico obtenerMedicoPorUsuario(Integer idUsuario) {
-        Medico medico = null;
-        SqlSession conexionBD = MybatisUtil.getSession();
-        if (conexionBD != null) {
-            try {
-                medico = conexionBD.selectOne("medico.obtenerPorUsuario", idUsuario);
-            } finally {
-                conexionBD.close();
-            }
-        }
-        return medico;
-    }
-
     public static Medico guardarMedico(Medico medico) {
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
+                if (medico.getContrasena() != null) {
+                    medico.setContrasena(Utilidades.hashPassword(medico.getContrasena()));
+                }
                 conexionBD.insert("medico.insertar", medico);
                 conexionBD.commit();
                 return medico;
@@ -68,6 +59,9 @@ public class MedicoImp {
         if (conexionBD != null) {
             try {
                 medico.setIdMedico(idMedico);
+                if (medico.getContrasena() != null) {
+                    medico.setContrasena(Utilidades.hashPassword(medico.getContrasena()));
+                }
                 int filas = conexionBD.update("medico.actualizar", medico);
                 conexionBD.commit();
                 return filas > 0 ? medico : null;

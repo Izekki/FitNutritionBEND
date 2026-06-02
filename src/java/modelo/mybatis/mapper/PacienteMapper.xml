@@ -5,7 +5,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="paciente">
     <resultMap id="pacienteMap" type="pojo.Paciente">
         <id property="idPaciente" column="idPaciente"/>
-        <result property="idUsuario" column="idUsuario"/>
         <result property="idMedico" column="idMedico"/>
         <result property="nombrePaciente" column="nombrePaciente"/>
         <result property="apellidosPaciente" column="apellidosPaciente"/>
@@ -22,51 +21,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <select id="listar" resultMap="pacienteMap">
-        SELECT idPaciente, idUsuario, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
+        SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
                peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
         FROM paciente
         ORDER BY idPaciente
     </select>
 
     <select id="obtenerPorId" parameterType="int" resultMap="pacienteMap">
-        SELECT idPaciente, idUsuario, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
+        SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
                peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
         FROM paciente
         WHERE idPaciente = #{idPaciente}
     </select>
 
-    <select id="obtenerPorUsuario" parameterType="int" resultMap="pacienteMap">
-        SELECT idPaciente, idUsuario, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
-               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
-        FROM paciente
-        WHERE idUsuario = #{idUsuario}
-    </select>
-
     <select id="obtenerPorCodigoAcceso" parameterType="string" resultMap="pacienteMap">
-        SELECT idPaciente, idUsuario, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
+        SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
                peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
         FROM paciente
         WHERE codigoAcceso = #{codigoAcceso}
     </select>
 
     <select id="obtenerPorEmail" parameterType="string" resultMap="pacienteMap">
-        SELECT idPaciente, idUsuario, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
+        SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
                peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
         FROM paciente
         WHERE email = #{email}
     </select>
 
     <insert id="insertar" parameterType="pojo.Paciente" useGeneratedKeys="true" keyProperty="idPaciente" keyColumn="idPaciente">
-        INSERT INTO paciente (idUsuario, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
+        INSERT INTO paciente (idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
                               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso)
-        VALUES (#{idUsuario}, #{idMedico}, #{nombrePaciente}, #{apellidosPaciente}, #{fechaNacimiento}, #{genero},
+        VALUES (#{idMedico}, #{nombrePaciente}, #{apellidosPaciente}, #{fechaNacimiento}, #{genero},
                 #{peso}, #{estatura}, #{talla}, #{email}, #{telefono}, #{domicilio}, #{fotografia}, #{codigoAcceso})
     </insert>
 
     <update id="actualizar" parameterType="pojo.Paciente">
         UPDATE paciente
-        SET idUsuario = #{idUsuario},
-            idMedico = #{idMedico},
+        SET idMedico = #{idMedico},
             nombrePaciente = #{nombrePaciente},
             apellidosPaciente = #{apellidosPaciente},
             fechaNacimiento = #{fechaNacimiento},

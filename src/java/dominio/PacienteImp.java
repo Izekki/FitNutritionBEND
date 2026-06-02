@@ -33,19 +33,6 @@ public class PacienteImp {
         return paciente;
     }
 
-    public static Paciente obtenerPacientePorUsuario(Integer idUsuario) {
-        Paciente paciente = null;
-        SqlSession conexionBD = MybatisUtil.getSession();
-        if (conexionBD != null) {
-            try {
-                paciente = conexionBD.selectOne("paciente.obtenerPorUsuario", idUsuario);
-            } finally {
-                conexionBD.close();
-            }
-        }
-        return paciente;
-    }
-
     public static Paciente guardarPaciente(Paciente paciente) {
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {

@@ -2,11 +2,11 @@ package pojo;
 
 public class Medico {
     private Integer idMedico;
-    private Integer idUsuario;
     private Integer numPersonal;
     private String cedulaProfesional;
     private String nombreMedico;
     private String apellidosMedico;
+    private String contrasena;
     private String fechaNacimiento;
     private String genero;
     private String email;
@@ -17,15 +17,15 @@ public class Medico {
     public Medico() {
     }
 
-    public Medico(Integer idMedico, Integer idUsuario, Integer numPersonal, String cedulaProfesional,
-            String nombreMedico, String apellidosMedico, String fechaNacimiento, String genero, String email,
-            String telefono, String domicilio, String fotografia) {
+    public Medico(Integer idMedico, Integer numPersonal, String cedulaProfesional,
+            String nombreMedico, String apellidosMedico, String contrasena, String fechaNacimiento, 
+            String genero, String email, String telefono, String domicilio, String fotografia) {
         this.idMedico = idMedico;
-        this.idUsuario = idUsuario;
         this.numPersonal = numPersonal;
         this.cedulaProfesional = cedulaProfesional;
         this.nombreMedico = nombreMedico;
         this.apellidosMedico = apellidosMedico;
+        this.contrasena = contrasena;
         this.fechaNacimiento = fechaNacimiento;
         this.genero = genero;
         this.email = email;
@@ -40,14 +40,6 @@ public class Medico {
 
     public void setIdMedico(Integer idMedico) {
         this.idMedico = idMedico;
-    }
-
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
     }
 
     public Integer getNumPersonal() {
@@ -80,6 +72,14 @@ public class Medico {
 
     public void setApellidosMedico(String apellidosMedico) {
         this.apellidosMedico = apellidosMedico;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public String getFechaNacimiento() {

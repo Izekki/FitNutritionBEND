@@ -5,12 +5,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="medico">
     <resultMap id="medicoMap" type="pojo.Medico">
         <id property="idMedico" column="idMedico"/>
-        <result property="idUsuario" column="idUsuario"/>
         <result property="numPersonal" column="numPersonal"/>
         <result property="cedulaProfesional" column="cedulaProfesional"/>
         <result property="nombreMedico" column="nombreMedico"/>
         <result property="apellidosMedico" column="apellidosMedico"/>
         <result property="fechaNacimiento" column="fechaNacimiento"/>
+        <result property="contrasena" column="contrasena"/>
         <result property="genero" column="genero"/>
         <result property="email" column="email"/>
         <result property="telefono" column="telefono"/>
@@ -19,48 +19,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <select id="listar" resultMap="medicoMap">
-        SELECT idMedico, idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-               fechaNacimiento, genero, email, telefono, domicilio, fotografia
+        SELECT idMedico, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
+               fechaNacimiento, contrasena, genero, email, telefono, domicilio, fotografia
         FROM medico
         ORDER BY idMedico
     </select>
 
     <select id="obtenerPorId" parameterType="int" resultMap="medicoMap">
-        SELECT idMedico, idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-               fechaNacimiento, genero, email, telefono, domicilio, fotografia
+        SELECT idMedico, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
+               fechaNacimiento, contrasena, genero, email, telefono, domicilio, fotografia
         FROM medico
         WHERE idMedico = #{idMedico}
     </select>
 
-    <select id="obtenerPorUsuario" parameterType="int" resultMap="medicoMap">
-        SELECT idMedico, idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-               fechaNacimiento, genero, email, telefono, domicilio, fotografia
-        FROM medico
-        WHERE idUsuario = #{idUsuario}
-    </select>
-
     <select id="obtenerPorEmail" parameterType="string" resultMap="medicoMap">
-        SELECT idMedico, idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-               fechaNacimiento, genero, email, telefono, domicilio, fotografia
+        SELECT idMedico, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
+               fechaNacimiento, contrasena, genero, email, telefono, domicilio, fotografia
         FROM medico
         WHERE email = #{email}
     </select>
 
     <insert id="insertar" parameterType="pojo.Medico" useGeneratedKeys="true" keyProperty="idMedico" keyColumn="idMedico">
-        INSERT INTO medico (idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-                            fechaNacimiento, genero, email, telefono, domicilio, fotografia)
-        VALUES (#{idUsuario}, #{numPersonal}, #{cedulaProfesional}, #{nombreMedico}, #{apellidosMedico},
-                #{fechaNacimiento}, #{genero}, #{email}, #{telefono}, #{domicilio}, #{fotografia})
+        INSERT INTO medico (numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
+                            fechaNacimiento, contrasena, genero, email, telefono, domicilio, fotografia)
+        VALUES (#{numPersonal}, #{cedulaProfesional}, #{nombreMedico}, #{apellidosMedico},
+                #{fechaNacimiento}, #{contrasena}, #{genero}, #{email}, #{telefono}, #{domicilio}, #{fotografia})
     </insert>
 
     <update id="actualizar" parameterType="pojo.Medico">
         UPDATE medico
-        SET idUsuario = #{idUsuario},
-            numPersonal = #{numPersonal},
+        SET numPersonal = #{numPersonal},
             cedulaProfesional = #{cedulaProfesional},
             nombreMedico = #{nombreMedico},
             apellidosMedico = #{apellidosMedico},
             fechaNacimiento = #{fechaNacimiento},
+            contrasena = #{contrasena},
             genero = #{genero},
             email = #{email},
             telefono = #{telefono},
