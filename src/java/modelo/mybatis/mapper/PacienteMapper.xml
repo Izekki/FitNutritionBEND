@@ -22,14 +22,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="listar" resultMap="pacienteMap">
         SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
-               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
+               peso, estatura, talla, email, telefono, domicilio, fotografia
         FROM paciente
         ORDER BY idPaciente
     </select>
 
     <select id="obtenerPorId" parameterType="int" resultMap="pacienteMap">
         SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
-               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
+               peso, estatura, talla, email, telefono, domicilio, fotografia
         FROM paciente
         WHERE idPaciente = #{idPaciente}
     </select>

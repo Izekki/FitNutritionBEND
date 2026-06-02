@@ -11,13 +11,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <select id="listar" resultMap="administradorMap">
-        SELECT idAdministrador, email, contrasena, nombreAdmin
+        SELECT idAdministrador, email, nombreAdmin
         FROM administrador
         ORDER BY idAdministrador
     </select>
 
     <select id="obtenerPorId" parameterType="int" resultMap="administradorMap">
-        SELECT idAdministrador, email, contrasena, nombreAdmin
+        SELECT idAdministrador, email, nombreAdmin
         FROM administrador
         WHERE idAdministrador = #{idAdministrador}
     </select>
