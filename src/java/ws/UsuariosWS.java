@@ -28,9 +28,9 @@ public class UsuariosWS {
     @POST
     @Path("ingresar-movil")
     public RSAutenticacionUsuario ingresarMovil(Paciente credenciales) {
-        if (credenciales == null || credenciales.getCodigoAcceso() == null) {
-            throw new BadRequestException("Se requiere codigoAcceso");
+        if (credenciales == null || credenciales.getEmail() == null || credenciales.getCodigoAcceso() == null) {
+            throw new BadRequestException("Se requieren email y codigoAcceso");
         }
-        return AutenticacionImp.autenticarPacienteMovil(credenciales.getCodigoAcceso());
+        return AutenticacionImp.autenticarPacienteMovil(credenciales.getEmail(), credenciales.getCodigoAcceso());
     }
 }

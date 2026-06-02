@@ -95,11 +95,11 @@ public class AutenticacionImp {
         return respuesta;
     }
 
-    public static RSAutenticacionUsuario autenticarPacienteMovil(String codigoAcceso) {
+    public static RSAutenticacionUsuario autenticarPacienteMovil(String email, String codigoAcceso) {
         RSAutenticacionUsuario respuesta = new RSAutenticacionUsuario();
         respuesta.setError(true);
 
-        if (codigoAcceso == null || codigoAcceso.trim().isEmpty()) {
+        if (email == null || email.trim().isEmpty() || codigoAcceso == null || codigoAcceso.trim().isEmpty()) {
             respuesta.setMensaje(Constantes.MSJ_CREDENCIALES_INVALIDAS);
             return respuesta;
         }
@@ -107,7 +107,11 @@ public class AutenticacionImp {
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                Paciente paciente = conexionBD.selectOne("paciente.obtenerPorCodigoAcceso", codigoAcceso);
+                java.util.Map<String, Object> parametros = new java.util.HashMap<>();
+                parametros.put("email", email);
+                parametros.put("codigoAcceso", codigoAcceso);
+
+                Paciente paciente = conexionBD.selectOne("paciente.obtenerPorEmailYCodigoAcceso", parametros);
                 if (paciente == null) {
                     respuesta.setMensaje(Constantes.MSJ_CREDENCIALES_INVALIDAS);
                     return respuesta;

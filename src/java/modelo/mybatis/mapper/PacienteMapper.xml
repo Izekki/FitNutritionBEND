@@ -41,6 +41,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE codigoAcceso = #{codigoAcceso}
     </select>
 
+    <select id="obtenerPorEmailYCodigoAcceso" parameterType="map" resultMap="pacienteMap">
+        SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
+               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
+        FROM paciente
+        WHERE email = #{email} AND codigoAcceso = #{codigoAcceso}
+    </select>
+
     <select id="obtenerPorEmail" parameterType="string" resultMap="pacienteMap">
         SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
                peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
