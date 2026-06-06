@@ -18,48 +18,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="domicilio" column="domicilio"/>
         <result property="fotografia" column="fotografia"/>
         <result property="codigoAcceso" column="codigoAcceso"/>
+        <result property="estatus" column="estatus"/>
     </resultMap>
 
     <select id="listar" resultMap="pacienteMap">
         SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
-               peso, estatura, talla, email, telefono, domicilio, fotografia
+               peso, estatura, talla, email, telefono, domicilio, fotografia, estatus
         FROM paciente
+        WHERE estatus = 'Activo'
         ORDER BY idPaciente
     </select>
 
     <select id="obtenerPorId" parameterType="int" resultMap="pacienteMap">
         SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
-               peso, estatura, talla, email, telefono, domicilio, fotografia
+               peso, estatura, talla, email, telefono, domicilio, fotografia, estatus
         FROM paciente
         WHERE idPaciente = #{idPaciente}
     </select>
 
     <select id="obtenerPorCodigoAcceso" parameterType="string" resultMap="pacienteMap">
         SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
-               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
+               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso, estatus
         FROM paciente
-        WHERE codigoAcceso = #{codigoAcceso}
+        WHERE codigoAcceso = #{codigoAcceso} AND estatus = 'Activo'
     </select>
 
     <select id="obtenerPorEmailYCodigoAcceso" parameterType="map" resultMap="pacienteMap">
         SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
-               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
+               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso, estatus
         FROM paciente
-        WHERE email = #{email} AND codigoAcceso = #{codigoAcceso}
+        WHERE email = #{email} AND codigoAcceso = #{codigoAcceso} AND estatus = 'Activo'
     </select>
 
     <select id="obtenerPorEmail" parameterType="string" resultMap="pacienteMap">
         SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
-               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso
+               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso, estatus
         FROM paciente
-        WHERE email = #{email}
+        WHERE email = #{email} AND estatus = 'Activo'
     </select>
 
     <insert id="insertar" parameterType="pojo.Paciente" useGeneratedKeys="true" keyProperty="idPaciente" keyColumn="idPaciente">
         INSERT INTO paciente (idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
-                              peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso)
+                              peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso, estatus)
         VALUES (#{idMedico}, #{nombrePaciente}, #{apellidosPaciente}, #{fechaNacimiento}, #{genero},
-                #{peso}, #{estatura}, #{talla}, #{email}, #{telefono}, #{domicilio}, #{fotografia}, #{codigoAcceso})
+                #{peso}, #{estatura}, #{talla}, #{email}, #{telefono}, #{domicilio}, #{fotografia}, #{codigoAcceso}, #{estatus})
     </insert>
 
     <update id="actualizar" parameterType="pojo.Paciente">
@@ -75,8 +77,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             email = #{email},
             telefono = #{telefono},
             domicilio = #{domicilio},
-            fotografia = #{fotografia},
-            codigoAcceso = #{codigoAcceso}
+            fotografia = #{fotografia}
+            <if test="codigoAcceso != null">
+                , codigoAcceso = #{codigoAcceso}
+            </if>
+            <if test="estatus != null">
+                , estatus = #{estatus}
+            </if>
         WHERE idPaciente = #{idPaciente}
     </update>
 
@@ -92,8 +99,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE idPaciente = #{idPaciente}
     </update>
 
-    <delete id="eliminar" parameterType="int">
-        DELETE FROM paciente
+    <update id="eliminar" parameterType="int">
+        UPDATE paciente
+        SET estatus = 'Inactivo'
         WHERE idPaciente = #{idPaciente}
-    </delete>
+    </update>
+
+    <update id="reasignarCitasDePacienteIndividual" parameterType="map">
+        UPDATE cita
+        SET idMedicoAnterior = idMedico,
+            idMedico = #{idMedicoDestino}
+        WHERE idPaciente = #{idPaciente} AND idMedico = #{idMedicoOrigen}
+    </update>
 </mapper>

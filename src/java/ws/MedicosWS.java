@@ -74,4 +74,15 @@ public class MedicosWS {
         }
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ELIMINADO, eliminado);
     }
+
+    @POST
+    @Path("{idMedicoOrigen}/reasignar-pacientes/{idMedicoDestino}")
+    public Respuesta reasignarPacientes(
+            @PathParam("idMedicoOrigen") Integer idMedicoOrigen,
+            @PathParam("idMedicoDestino") Integer idMedicoDestino) {
+        if (idMedicoOrigen == null || idMedicoOrigen <= 0 || idMedicoDestino == null || idMedicoDestino <= 0) {
+            throw new BadRequestException("IDs de médicos inválidos");
+        }
+        return MedicoImp.reasignarPacientes(idMedicoOrigen, idMedicoDestino);
+    }
 }

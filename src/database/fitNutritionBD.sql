@@ -91,6 +91,7 @@ CREATE TABLE `cita`  (
   `idCita` INT NOT NULL AUTO_INCREMENT,
   `idPaciente` INT NOT NULL, 
   `idMedico` INT NOT NULL,
+  `idMedicoAnterior` INT NULL,
   `fecha` DATE NOT NULL,
   `hora` TIME NOT NULL,
   `estado` ENUM('Asignada','Cancelada','Reagendada', 'Asistida', 'Ausente') NOT NULL  DEFAULT 'Asignada',
@@ -98,7 +99,8 @@ CREATE TABLE `cita`  (
   PRIMARY KEY (`idCita`) USING BTREE,
 
   CONSTRAINT `fk_citaPaciente` FOREIGN KEY (`idPaciente`) REFERENCES `paciente` (`idPaciente`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_citaMedica` FOREIGN KEY (`idMedico`) REFERENCES `medico` (`idMedico`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_citaMedica` FOREIGN KEY (`idMedico`) REFERENCES `medico` (`idMedico`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_citaMedicoAnterior` FOREIGN KEY (`idMedicoAnterior`) REFERENCES `medico` (`idMedico`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------

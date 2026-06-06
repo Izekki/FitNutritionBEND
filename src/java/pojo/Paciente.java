@@ -15,8 +15,10 @@ public class Paciente {
     private String domicilio;
     private String fotografia;
     private String codigoAcceso;
+    private String estatus;
 
     public Paciente() {
+        this.estatus = "Activo";
     }
 
     public Paciente(Integer idPaciente, Integer idMedico, String nombrePaciente,
@@ -36,6 +38,7 @@ public class Paciente {
         this.domicilio = domicilio;
         this.fotografia = fotografia;
         this.codigoAcceso = codigoAcceso;
+        this.estatus = "Activo";
     }
 
     public Integer getIdPaciente() {
@@ -148,5 +151,13 @@ public class Paciente {
 
     public void setCodigoAcceso(String codigoAcceso) {
         this.codigoAcceso = codigoAcceso;
+    }
+
+    public String getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
     }
 }

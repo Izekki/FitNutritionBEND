@@ -13,8 +13,10 @@ public class Medico {
     private String telefono;
     private String domicilio;
     private String fotografia;
+    private String estatus;
 
     public Medico() {
+        this.estatus = "Activo";
     }
 
     public Medico(Integer idMedico, Integer numPersonal, String cedulaProfesional,
@@ -32,6 +34,7 @@ public class Medico {
         this.telefono = telefono;
         this.domicilio = domicilio;
         this.fotografia = fotografia;
+        this.estatus = "Activo";
     }
 
     public Integer getIdMedico() {
@@ -128,5 +131,13 @@ public class Medico {
 
     public void setFotografia(String fotografia) {
         this.fotografia = fotografia;
+    }
+
+    public String getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
     }
 }

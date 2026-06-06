@@ -1,5 +1,6 @@
 package dominio;
 
+import dto.Respuesta;
 import java.util.List;
 import modelo.mybatis.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
@@ -83,8 +84,9 @@ public class MedicoImp {
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                conexionBD.delete("medico.eliminar", idMedico);
+                conexionBD.update("medico.eliminar", idMedico);
                 conexionBD.commit();
+                medico.setEstatus("Inactivo");
                 return medico;
             } catch (Exception e) {
                 conexionBD.rollback();
@@ -94,5 +96,38 @@ public class MedicoImp {
             }
         }
         return null;
+    }
+
+    public static Respuesta reasignarPacientes(Integer idMedicoOrigen, Integer idMedicoDestino) {
+        SqlSession conexionBD = MybatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                // Verificar que ambos médicos existan
+                Medico origen = conexionBD.selectOne("medico.obtenerPorId", idMedicoOrigen);
+                Medico destino = conexionBD.selectOne("medico.obtenerPorId", idMedicoDestino);
+                if (origen == null || destino == null) {
+                    return new Respuesta(true, "Uno o ambos médicos no existen.");
+                }
+
+                java.util.Map<String, Object> params = new java.util.HashMap<>();
+                params.put("idMedicoOrigen", idMedicoOrigen);
+                params.put("idMedicoDestino", idMedicoDestino);
+
+                // 1. Reasignar citas del médico anterior para los pacientes correspondientes
+                conexionBD.update("medico.reasignarCitasDePacientes", params);
+
+                // 2. Reasignar los pacientes al nuevo médico
+                int pacientesReasignados = conexionBD.update("medico.reasignarPacientes", params);
+
+                conexionBD.commit();
+                return new Respuesta(false, "Pacientes y citas reasignados con éxito. Pacientes modificados: " + pacientesReasignados);
+            } catch (Exception e) {
+                conexionBD.rollback();
+                return new Respuesta(true, "Error al reasignar pacientes: " + e.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return new Respuesta(true, utilidades.Constantes.MSJ_ERROR_BD);
     }
 }

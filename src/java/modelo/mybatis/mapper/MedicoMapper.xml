@@ -16,34 +16,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="telefono" column="telefono"/>
         <result property="domicilio" column="domicilio"/>
         <result property="fotografia" column="fotografia"/>
+        <result property="estatus" column="estatus"/>
     </resultMap>
 
     <select id="listar" resultMap="medicoMap">
         SELECT idMedico, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-               fechaNacimiento, genero, email, telefono, domicilio, fotografia
+               fechaNacimiento, genero, email, telefono, domicilio, fotografia, estatus
         FROM medico
+        WHERE estatus = 'Activo'
         ORDER BY idMedico
     </select>
 
     <select id="obtenerPorId" parameterType="int" resultMap="medicoMap">
         SELECT idMedico, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-               fechaNacimiento, genero, email, telefono, domicilio, fotografia
+               fechaNacimiento, genero, email, telefono, domicilio, fotografia, estatus
         FROM medico
         WHERE idMedico = #{idMedico}
     </select>
 
     <select id="obtenerPorEmail" parameterType="string" resultMap="medicoMap">
         SELECT idMedico, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-               fechaNacimiento, contrasena, genero, email, telefono, domicilio, fotografia
+               fechaNacimiento, contrasena, genero, email, telefono, domicilio, fotografia, estatus
         FROM medico
-        WHERE email = #{email}
+        WHERE email = #{email} AND estatus = 'Activo'
     </select>
 
     <insert id="insertar" parameterType="pojo.Medico" useGeneratedKeys="true" keyProperty="idMedico" keyColumn="idMedico">
         INSERT INTO medico (numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-                            fechaNacimiento, contrasena, genero, email, telefono, domicilio, fotografia)
+                             fechaNacimiento, contrasena, genero, email, telefono, domicilio, fotografia, estatus)
         VALUES (#{numPersonal}, #{cedulaProfesional}, #{nombreMedico}, #{apellidosMedico},
-                #{fechaNacimiento}, #{contrasena}, #{genero}, #{email}, #{telefono}, #{domicilio}, #{fotografia})
+                #{fechaNacimiento}, #{contrasena}, #{genero}, #{email}, #{telefono}, #{domicilio}, #{fotografia}, #{estatus})
     </insert>
 
     <update id="actualizar" parameterType="pojo.Medico">
@@ -53,12 +55,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             nombreMedico = #{nombreMedico},
             apellidosMedico = #{apellidosMedico},
             fechaNacimiento = #{fechaNacimiento},
-            contrasena = #{contrasena},
             genero = #{genero},
             email = #{email},
             telefono = #{telefono},
             domicilio = #{domicilio},
             fotografia = #{fotografia}
+            <if test="contrasena != null">
+                , contrasena = #{contrasena}
+            </if>
+            <if test="estatus != null">
+                , estatus = #{estatus}
+            </if>
         WHERE idMedico = #{idMedico}
     </update>
 
@@ -74,8 +81,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE idMedico = #{idMedico}
     </update>
 
-    <delete id="eliminar" parameterType="int">
-        DELETE FROM medico
+    <update id="eliminar" parameterType="int">
+        UPDATE medico
+        SET estatus = 'Inactivo'
         WHERE idMedico = #{idMedico}
-    </delete>
+    </update>
+
+    <update id="reasignarCitasDePacientes" parameterType="map">
+        UPDATE cita c
+        INNER JOIN paciente p ON c.idPaciente = p.idPaciente
+        SET c.idMedicoAnterior = c.idMedico,
+            c.idMedico = #{idMedicoDestino}
+        WHERE p.idMedico = #{idMedicoOrigen} AND c.idMedico = #{idMedicoOrigen}
+    </update>
+
+    <update id="reasignarPacientes" parameterType="map">
+        UPDATE paciente
+        SET idMedico = #{idMedicoDestino}
+        WHERE idMedico = #{idMedicoOrigen}
+    </update>
 </mapper>
