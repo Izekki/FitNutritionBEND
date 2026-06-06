@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import pojo.Medico;
+import javax.ws.rs.QueryParam;
 import utilidades.Constantes;
 
 @Path("medicos")
@@ -68,10 +69,39 @@ public class MedicosWS {
         if (idMedico == null || idMedico <= 0) {
             throw new BadRequestException("ID de médico requerido");
         }
-        Medico eliminado = MedicoImp.eliminarMedico(idMedico);
-        if (eliminado == null) {
-            return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
+        try {
+            Medico eliminado = MedicoImp.eliminarMedico(idMedico);
+            if (eliminado == null) {
+                return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
+            }
+            return new Respuesta(false, Constantes.MSJ_REGISTRO_ELIMINADO, eliminado);
+        } catch (RuntimeException e) {
+            String msg = e.getMessage();
+            if (e.getCause() != null && e.getCause().getMessage() != null) {
+                msg = e.getCause().getMessage();
+            }
+            return new Respuesta(true, msg != null ? msg : Constantes.MSJ_ERROR_BD, null);
         }
-        return new Respuesta(false, Constantes.MSJ_REGISTRO_ELIMINADO, eliminado);
+    }
+
+    @POST
+    @Path("{idMedicoOrigen}/reasignar-pacientes/{idMedicoDestino}")
+    public Respuesta reasignarPacientes(
+            @PathParam("idMedicoOrigen") Integer idMedicoOrigen,
+            @PathParam("idMedicoDestino") Integer idMedicoDestino) {
+        if (idMedicoOrigen == null || idMedicoOrigen <= 0 || idMedicoDestino == null || idMedicoDestino <= 0) {
+            throw new BadRequestException("IDs de médicos inválidos");
+        }
+        return MedicoImp.reasignarPacientes(idMedicoOrigen, idMedicoDestino);
+    }
+
+    @GET
+    @Path("buscar")
+    public List<Medico> buscarMedicos(
+            @QueryParam("nombre") String nombre,
+            @QueryParam("numPersonal") Integer numPersonal,
+            @QueryParam("cedulaProfesional") String cedulaProfesional,
+            @QueryParam("estatus") String estatus) {
+        return MedicoImp.buscarMedicos(nombre, numPersonal, cedulaProfesional, estatus);
     }
 }

@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <id property="idCita" column="idCita"/>
         <result property="idPaciente" column="idPaciente"/>
         <result property="idMedico" column="idMedico"/>
+        <result property="idMedicoAnterior" column="idMedicoAnterior"/>
         <result property="fecha" column="fecha"/>
         <result property="hora" column="hora"/>
         <result property="estado" column="estado"/>
@@ -14,26 +15,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <select id="listar" resultMap="citaMap">
-        SELECT idCita, idPaciente, idMedico, fecha, hora, estado, observaciones
+        SELECT idCita, idPaciente, idMedico, idMedicoAnterior, fecha, hora, estado, observaciones
         FROM cita
         ORDER BY idCita
     </select>
 
     <select id="obtenerPorId" parameterType="int" resultMap="citaMap">
-        SELECT idCita, idPaciente, idMedico, fecha, hora, estado, observaciones
+        SELECT idCita, idPaciente, idMedico, idMedicoAnterior, fecha, hora, estado, observaciones
         FROM cita
         WHERE idCita = #{idCita}
     </select>
 
     <insert id="insertar" parameterType="pojo.Cita" useGeneratedKeys="true" keyProperty="idCita" keyColumn="idCita">
-        INSERT INTO cita (idPaciente, idMedico, fecha, hora, estado, observaciones)
-        VALUES (#{idPaciente}, #{idMedico}, #{fecha}, #{hora}, #{estado}, #{observaciones})
+        INSERT INTO cita (idPaciente, idMedico, idMedicoAnterior, fecha, hora, estado, observaciones)
+        VALUES (#{idPaciente}, #{idMedico}, #{idMedicoAnterior}, #{fecha}, #{hora}, #{estado}, #{observaciones})
     </insert>
 
     <update id="actualizar" parameterType="pojo.Cita">
         UPDATE cita
         SET idPaciente = #{idPaciente},
             idMedico = #{idMedico},
+            idMedicoAnterior = #{idMedicoAnterior},
             fecha = #{fecha},
             hora = #{hora},
             estado = #{estado},
@@ -45,4 +47,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         DELETE FROM cita
         WHERE idCita = #{idCita}
     </delete>
+    <select id="buscar" resultMap="citaMap" parameterType="map">
+        SELECT idCita, idPaciente, idMedico, idMedicoAnterior, fecha, hora, estado, observaciones
+        FROM cita
+        <where>
+            <if test="fecha != null and fecha != ''">
+                AND fecha = #{fecha}
+            </if>
+            <if test="idPaciente != null">
+                AND idPaciente = #{idPaciente}
+            </if>
+            <if test="idMedico != null">
+                AND idMedico = #{idMedico}
+            </if>
+            <if test="estado != null and estado != ''">
+                AND estado = #{estado}
+            </if>
+        </where>
+        ORDER BY fecha DESC, hora DESC
+    </select>
+
+    <select id="obtenerPorPaciente" parameterType="int" resultMap="citaMap">
+        SELECT idCita, idPaciente, idMedico, idMedicoAnterior, fecha, hora, estado, observaciones
+        FROM cita
+        WHERE idPaciente = #{idPaciente}
+        ORDER BY fecha DESC, hora DESC
+    </select>
 </mapper>

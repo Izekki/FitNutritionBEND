@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import pojo.Cita;
+import javax.ws.rs.QueryParam;
 import utilidades.Constantes;
 
 @Path("citas")
@@ -73,5 +74,34 @@ public class CitasWS {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ELIMINADO, eliminada);
+    }
+
+    @PUT
+    @Path("{idCita}/cancelar")
+    public Respuesta cancelarCita(@PathParam("idCita") Integer idCita, java.util.Map<String, String> payload) {
+        if (idCita == null || idCita <= 0 || payload == null || !payload.containsKey("motivo")) {
+            throw new BadRequestException("ID de cita y motivo de cancelación requeridos");
+        }
+        String motivo = payload.get("motivo");
+        return CitaImp.cancelarCita(idCita, motivo);
+    }
+
+    @GET
+    @Path("paciente/{idPaciente}")
+    public List<Cita> listarPorPaciente(@PathParam("idPaciente") Integer idPaciente) {
+        if (idPaciente == null || idPaciente <= 0) {
+            throw new BadRequestException("ID de paciente requerido");
+        }
+        return CitaImp.listarPorPaciente(idPaciente);
+    }
+
+    @GET
+    @Path("buscar")
+    public List<Cita> buscarCitas(
+            @QueryParam("fecha") String fecha,
+            @QueryParam("idPaciente") Integer idPaciente,
+            @QueryParam("idMedico") Integer idMedico,
+            @QueryParam("estado") String estado) {
+        return CitaImp.buscarCitas(fecha, idPaciente, idMedico, estado);
     }
 }

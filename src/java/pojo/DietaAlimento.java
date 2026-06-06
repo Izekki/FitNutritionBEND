@@ -6,6 +6,7 @@ public class DietaAlimento {
     private Integer idAlimento;
     private String porcion;
     private Double caloriasPorcion;
+    private String tiempoComida;
 
     public DietaAlimento() {
     }
@@ -17,6 +18,16 @@ public class DietaAlimento {
         this.idAlimento = idAlimento;
         this.porcion = porcion;
         this.caloriasPorcion = caloriasPorcion;
+    }
+
+    public DietaAlimento(Integer idDietaAlimento, Integer idDieta, Integer idAlimento, String porcion,
+            Double caloriasPorcion, String tiempoComida) {
+        this.idDietaAlimento = idDietaAlimento;
+        this.idDieta = idDieta;
+        this.idAlimento = idAlimento;
+        this.porcion = porcion;
+        this.caloriasPorcion = caloriasPorcion;
+        this.tiempoComida = tiempoComida;
     }
 
     public Integer getIdDietaAlimento() {
@@ -57,5 +68,13 @@ public class DietaAlimento {
 
     public void setCaloriasPorcion(Double caloriasPorcion) {
         this.caloriasPorcion = caloriasPorcion;
+    }
+
+    public String getTiempoComida() {
+        return tiempoComida;
+    }
+
+    public void setTiempoComida(String tiempoComida) {
+        this.tiempoComida = tiempoComida;
     }
 }

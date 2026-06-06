@@ -5,35 +5,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="administrador">
     <resultMap id="administradorMap" type="pojo.Administrador">
         <id property="idAdministrador" column="idAdministrador"/>
-        <result property="idUsuario" column="idUsuario"/>
+        <result property="email" column="email"/>
+        <result property="contrasena" column="contrasena"/>
+        <result property="nombreAdmin" column="nombreAdmin"/>
     </resultMap>
 
     <select id="listar" resultMap="administradorMap">
-        SELECT idAdministrador, idUsuario
+        SELECT idAdministrador, email, nombreAdmin
         FROM administrador
         ORDER BY idAdministrador
     </select>
 
     <select id="obtenerPorId" parameterType="int" resultMap="administradorMap">
-        SELECT idAdministrador, idUsuario
+        SELECT idAdministrador, email, nombreAdmin
         FROM administrador
         WHERE idAdministrador = #{idAdministrador}
     </select>
 
-    <select id="obtenerPorUsuario" parameterType="int" resultMap="administradorMap">
-        SELECT idAdministrador, idUsuario
+    <select id="obtenerPorEmail" parameterType="string" resultMap="administradorMap">
+        SELECT idAdministrador, email, contrasena, nombreAdmin
         FROM administrador
-        WHERE idUsuario = #{idUsuario}
+        WHERE email = #{email}
     </select>
 
     <insert id="insertar" parameterType="pojo.Administrador" useGeneratedKeys="true" keyProperty="idAdministrador" keyColumn="idAdministrador">
-        INSERT INTO administrador (idUsuario)
-        VALUES (#{idUsuario})
+        INSERT INTO administrador (email, contrasena, nombreAdmin)
+        VALUES (#{email}, #{contrasena}, #{nombreAdmin})
     </insert>
 
     <update id="actualizar" parameterType="pojo.Administrador">
         UPDATE administrador
-        SET idUsuario = #{idUsuario}
+        SET email = #{email},
+            contrasena = #{contrasena},
+            nombreAdmin = #{nombreAdmin}
+        WHERE idAdministrador = #{idAdministrador}
+    </update>
+
+    <update id="actualizarContrasena" parameterType="map">
+        UPDATE administrador
+        SET contrasena = #{contrasena}
         WHERE idAdministrador = #{idAdministrador}
     </update>
 

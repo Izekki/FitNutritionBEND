@@ -22,7 +22,7 @@ public class MybatisUtil {
             props.setProperty("db.username",
                     System.getenv("DB_USERNAME") != null ? System.getenv("DB_USERNAME") : "root");
             props.setProperty("db.password",
-                    System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "");
+                    System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "password2026");
 
             Reader reader = Resources.getResourceAsReader(RESOURCE);
             SqlSessionFactory sqlMapper = new SqlSessionFactoryBuilder().build(reader, ENVIROMENT, props);

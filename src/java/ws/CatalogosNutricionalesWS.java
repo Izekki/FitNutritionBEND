@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import pojo.Alimento;
@@ -131,5 +132,11 @@ public class CatalogosNutricionalesWS {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ELIMINADO, eliminado);
+    }
+
+    @GET
+    @Path("alimentos/buscar")
+    public List<Alimento> buscarAlimentos(@QueryParam("nombre") String nombre) {
+        return CatalogoImp.buscarAlimentos(nombre);
     }
 }

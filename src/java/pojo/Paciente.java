@@ -2,7 +2,6 @@ package pojo;
 
 public class Paciente {
     private Integer idPaciente;
-    private Integer idUsuario;
     private Integer idMedico;
     private String nombrePaciente;
     private String apellidosPaciente;
@@ -16,15 +15,16 @@ public class Paciente {
     private String domicilio;
     private String fotografia;
     private String codigoAcceso;
+    private String estatus;
 
     public Paciente() {
+        this.estatus = "Activo";
     }
 
-    public Paciente(Integer idPaciente, Integer idUsuario, Integer idMedico, String nombrePaciente,
+    public Paciente(Integer idPaciente, Integer idMedico, String nombrePaciente,
             String apellidosPaciente, String fechaNacimiento, String genero, Double peso, Double estatura, Double talla,
             String email, String telefono, String domicilio, String fotografia, String codigoAcceso) {
         this.idPaciente = idPaciente;
-        this.idUsuario = idUsuario;
         this.idMedico = idMedico;
         this.nombrePaciente = nombrePaciente;
         this.apellidosPaciente = apellidosPaciente;
@@ -38,6 +38,7 @@ public class Paciente {
         this.domicilio = domicilio;
         this.fotografia = fotografia;
         this.codigoAcceso = codigoAcceso;
+        this.estatus = "Activo";
     }
 
     public Integer getIdPaciente() {
@@ -46,14 +47,6 @@ public class Paciente {
 
     public void setIdPaciente(Integer idPaciente) {
         this.idPaciente = idPaciente;
-    }
-
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
     }
 
     public Integer getIdMedico() {
@@ -158,5 +151,13 @@ public class Paciente {
 
     public void setCodigoAcceso(String codigoAcceso) {
         this.codigoAcceso = codigoAcceso;
+    }
+
+    public String getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
     }
 }

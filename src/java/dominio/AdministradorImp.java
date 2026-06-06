@@ -4,6 +4,7 @@ import java.util.List;
 import modelo.mybatis.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Administrador;
+import utilidades.Utilidades;
 
 public class AdministradorImp {
 
@@ -19,7 +20,7 @@ public class AdministradorImp {
         }
         return administradores;
     }
-
+    
     public static Administrador obtenerAdministrador(Integer idAdministrador) {
         Administrador administrador = null;
         SqlSession conexionBD = MybatisUtil.getSession();
@@ -33,23 +34,13 @@ public class AdministradorImp {
         return administrador;
     }
 
-    public static Administrador obtenerAdministradorPorUsuario(Integer idUsuario) {
-        Administrador administrador = null;
-        SqlSession conexionBD = MybatisUtil.getSession();
-        if (conexionBD != null) {
-            try {
-                administrador = conexionBD.selectOne("administrador.obtenerPorUsuario", idUsuario);
-            } finally {
-                conexionBD.close();
-            }
-        }
-        return administrador;
-    }
-
     public static Administrador guardarAdministrador(Administrador administrador) {
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
+                if (administrador.getContrasena() != null) {
+                    administrador.setContrasena(Utilidades.hashPassword(administrador.getContrasena()));
+                }
                 conexionBD.insert("administrador.insertar", administrador);
                 conexionBD.commit();
                 return administrador;
@@ -68,6 +59,9 @@ public class AdministradorImp {
         if (conexionBD != null) {
             try {
                 administrador.setIdAdministrador(idAdministrador);
+                if (administrador.getContrasena() != null) {
+                    administrador.setContrasena(Utilidades.hashPassword(administrador.getContrasena()));
+                }
                 int filas = conexionBD.update("administrador.actualizar", administrador);
                 conexionBD.commit();
                 return filas > 0 ? administrador : null;
@@ -102,4 +96,3 @@ public class AdministradorImp {
         return null;
     }
 }
-

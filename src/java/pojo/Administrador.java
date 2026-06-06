@@ -2,14 +2,18 @@ package pojo;
 
 public class Administrador {
     private Integer idAdministrador;
-    private Integer idUsuario;
+    private String email;
+    private String contrasena;
+    private String nombreAdmin;
 
     public Administrador() {
     }
 
-    public Administrador(Integer idAdministrador, Integer idUsuario) {
+    public Administrador(Integer idAdministrador, String email, String contrasena, String nombreAdmin) {
         this.idAdministrador = idAdministrador;
-        this.idUsuario = idUsuario;
+        this.email = email;
+        this.contrasena = contrasena;
+        this.nombreAdmin = nombreAdmin;
     }
 
     public Integer getIdAdministrador() {
@@ -20,11 +24,27 @@ public class Administrador {
         this.idAdministrador = idAdministrador;
     }
 
-    public Integer getIdUsuario() {
-        return idUsuario;
+    public String getEmail() {
+        return email;
     }
 
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public String getNombreAdmin() {
+        return nombreAdmin;
+    }
+
+    public void setNombreAdmin(String nombreAdmin) {
+        this.nombreAdmin = nombreAdmin;
     }
 }

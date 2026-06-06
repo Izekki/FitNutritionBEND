@@ -5,58 +5,52 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="medico">
     <resultMap id="medicoMap" type="pojo.Medico">
         <id property="idMedico" column="idMedico"/>
-        <result property="idUsuario" column="idUsuario"/>
         <result property="numPersonal" column="numPersonal"/>
         <result property="cedulaProfesional" column="cedulaProfesional"/>
         <result property="nombreMedico" column="nombreMedico"/>
         <result property="apellidosMedico" column="apellidosMedico"/>
         <result property="fechaNacimiento" column="fechaNacimiento"/>
+        <result property="contrasena" column="contrasena"/>
         <result property="genero" column="genero"/>
         <result property="email" column="email"/>
         <result property="telefono" column="telefono"/>
         <result property="domicilio" column="domicilio"/>
         <result property="fotografia" column="fotografia"/>
+        <result property="estatus" column="estatus"/>
     </resultMap>
 
     <select id="listar" resultMap="medicoMap">
-        SELECT idMedico, idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-               fechaNacimiento, genero, email, telefono, domicilio, fotografia
+        SELECT idMedico, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
+               fechaNacimiento, genero, email, telefono, domicilio, fotografia, estatus
         FROM medico
+        WHERE estatus = 'Activo'
         ORDER BY idMedico
     </select>
 
     <select id="obtenerPorId" parameterType="int" resultMap="medicoMap">
-        SELECT idMedico, idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-               fechaNacimiento, genero, email, telefono, domicilio, fotografia
+        SELECT idMedico, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
+               fechaNacimiento, genero, email, telefono, domicilio, fotografia, estatus
         FROM medico
         WHERE idMedico = #{idMedico}
     </select>
 
-    <select id="obtenerPorUsuario" parameterType="int" resultMap="medicoMap">
-        SELECT idMedico, idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-               fechaNacimiento, genero, email, telefono, domicilio, fotografia
-        FROM medico
-        WHERE idUsuario = #{idUsuario}
-    </select>
-
     <select id="obtenerPorEmail" parameterType="string" resultMap="medicoMap">
-        SELECT idMedico, idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-               fechaNacimiento, genero, email, telefono, domicilio, fotografia
+        SELECT idMedico, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
+               fechaNacimiento, contrasena, genero, email, telefono, domicilio, fotografia, estatus
         FROM medico
-        WHERE email = #{email}
+        WHERE email = #{email} AND estatus = 'Activo'
     </select>
 
     <insert id="insertar" parameterType="pojo.Medico" useGeneratedKeys="true" keyProperty="idMedico" keyColumn="idMedico">
-        INSERT INTO medico (idUsuario, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
-                            fechaNacimiento, genero, email, telefono, domicilio, fotografia)
-        VALUES (#{idUsuario}, #{numPersonal}, #{cedulaProfesional}, #{nombreMedico}, #{apellidosMedico},
-                #{fechaNacimiento}, #{genero}, #{email}, #{telefono}, #{domicilio}, #{fotografia})
+        INSERT INTO medico (numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
+                             fechaNacimiento, contrasena, genero, email, telefono, domicilio, fotografia, estatus)
+        VALUES (#{numPersonal}, #{cedulaProfesional}, #{nombreMedico}, #{apellidosMedico},
+                #{fechaNacimiento}, #{contrasena}, #{genero}, #{email}, #{telefono}, #{domicilio}, #{fotografia}, #{estatus})
     </insert>
 
     <update id="actualizar" parameterType="pojo.Medico">
         UPDATE medico
-        SET idUsuario = #{idUsuario},
-            numPersonal = #{numPersonal},
+        SET numPersonal = #{numPersonal},
             cedulaProfesional = #{cedulaProfesional},
             nombreMedico = #{nombreMedico},
             apellidosMedico = #{apellidosMedico},
@@ -66,11 +60,70 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             telefono = #{telefono},
             domicilio = #{domicilio},
             fotografia = #{fotografia}
+            <if test="contrasena != null">
+                , contrasena = #{contrasena}
+            </if>
+            <if test="estatus != null">
+                , estatus = #{estatus}
+            </if>
         WHERE idMedico = #{idMedico}
     </update>
 
-    <delete id="eliminar" parameterType="int">
-        DELETE FROM medico
+    <update id="actualizarFotografia" parameterType="map">
+        UPDATE medico
+        SET fotografia = #{fotografia}
         WHERE idMedico = #{idMedico}
-    </delete>
+    </update>
+
+    <update id="actualizarContrasena" parameterType="map">
+        UPDATE medico
+        SET contrasena = #{contrasena}
+        WHERE idMedico = #{idMedico}
+    </update>
+
+    <update id="eliminar" parameterType="int">
+        UPDATE medico
+        SET estatus = 'Inactivo'
+        WHERE idMedico = #{idMedico}
+    </update>
+
+    <update id="reasignarCitasDePacientes" parameterType="map">
+        UPDATE cita c
+        INNER JOIN paciente p ON c.idPaciente = p.idPaciente
+        SET c.idMedicoAnterior = c.idMedico,
+            c.idMedico = #{idMedicoDestino}
+        WHERE p.idMedico = #{idMedicoOrigen} AND c.idMedico = #{idMedicoOrigen}
+    </update>
+
+    <update id="reasignarPacientes" parameterType="map">
+        UPDATE paciente
+        SET idMedico = #{idMedicoDestino}
+        WHERE idMedico = #{idMedicoOrigen}
+    </update>
+    <select id="buscar" resultMap="medicoMap" parameterType="map">
+        SELECT idMedico, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
+               fechaNacimiento, genero, email, telefono, domicilio, fotografia, estatus
+        FROM medico
+        <where>
+            <if test="nombre != null and nombre != ''">
+                AND (nombreMedico LIKE CONCAT('%', #{nombre}, '%') OR apellidosMedico LIKE CONCAT('%', #{nombre}, '%'))
+            </if>
+            <if test="numPersonal != null">
+                AND numPersonal = #{numPersonal}
+            </if>
+            <if test="cedulaProfesional != null and cedulaProfesional != ''">
+                AND cedulaProfesional LIKE CONCAT('%', #{cedulaProfesional}, '%')
+            </if>
+            <if test="estatus != null and estatus != ''">
+                AND estatus = #{estatus}
+            </if>
+        </where>
+        ORDER BY idMedico
+    </select>
+
+    <select id="contarPacientesActivos" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM paciente
+        WHERE idMedico = #{idMedico} AND estatus = 'Activo'
+    </select>
 </mapper>
