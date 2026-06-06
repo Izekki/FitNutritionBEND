@@ -84,13 +84,17 @@ public class MedicoImp {
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
+                int countPatients = conexionBD.selectOne("medico.contarPacientesActivos", idMedico);
+                if (countPatients > 0) {
+                    throw new IllegalStateException("No se puede dar de baja al médico porque aún tiene pacientes activos asignados. Reasígnelos primero.");
+                }
                 conexionBD.update("medico.eliminar", idMedico);
                 conexionBD.commit();
                 medico.setEstatus("Inactivo");
                 return medico;
             } catch (Exception e) {
                 conexionBD.rollback();
-                throw new RuntimeException(e);
+                throw new RuntimeException(e.getMessage() != null ? e.getMessage() : e.toString(), e);
             } finally {
                 conexionBD.close();
             }
@@ -129,5 +133,23 @@ public class MedicoImp {
             }
         }
         return new Respuesta(true, utilidades.Constantes.MSJ_ERROR_BD);
+    }
+
+    public static List<Medico> buscarMedicos(String nombre, Integer numPersonal, String cedulaProfesional, String estatus) {
+        List<Medico> medicos = null;
+        SqlSession conexionBD = MybatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                java.util.Map<String, Object> params = new java.util.HashMap<>();
+                params.put("nombre", nombre);
+                params.put("numPersonal", numPersonal);
+                params.put("cedulaProfesional", cedulaProfesional);
+                params.put("estatus", estatus);
+                medicos = conexionBD.selectList("medico.buscar", params);
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return medicos;
     }
 }

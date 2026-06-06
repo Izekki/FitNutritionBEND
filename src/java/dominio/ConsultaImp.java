@@ -95,4 +95,47 @@ public class ConsultaImp {
         }
         return null;
     }
+
+    public static List<Consulta> listarPorPaciente(Integer idPaciente) {
+        List<Consulta> consultas = null;
+        SqlSession conexionBD = MybatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                consultas = conexionBD.selectList("consulta.obtenerPorPaciente", idPaciente);
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return consultas;
+    }
+
+    public static Consulta obtenerUltimaPorPaciente(Integer idPaciente) {
+        Consulta consulta = null;
+        SqlSession conexionBD = MybatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                consulta = conexionBD.selectOne("consulta.obtenerUltimaPorPaciente", idPaciente);
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return consulta;
+    }
+
+    public static List<Consulta> buscarConsultas(Integer idPaciente, Integer idMedico, String fecha) {
+        List<Consulta> consultas = null;
+        SqlSession conexionBD = MybatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                java.util.Map<String, Object> params = new java.util.HashMap<>();
+                params.put("idPaciente", idPaciente);
+                params.put("idMedico", idMedico);
+                params.put("fecha", fecha);
+                consultas = conexionBD.selectList("consulta.buscar", params);
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return consultas;
+    }
 }

@@ -51,4 +51,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         DELETE FROM consulta
         WHERE idConsulta = #{idConsulta}
     </delete>
+    <select id="obtenerPorPaciente" parameterType="int" resultMap="consultaMap">
+        SELECT idConsulta, idPaciente, idMedico, idCita, idDieta, fecha, pesoCapturado, tallaCapturada, imcCalculado, observaciones
+        FROM consulta
+        WHERE idPaciente = #{idPaciente}
+        ORDER BY fecha DESC, idConsulta DESC
+    </select>
+
+    <select id="obtenerUltimaPorPaciente" parameterType="int" resultMap="consultaMap">
+        SELECT idConsulta, idPaciente, idMedico, idCita, idDieta, fecha, pesoCapturado, tallaCapturada, imcCalculado, observaciones
+        FROM consulta
+        WHERE idPaciente = #{idPaciente}
+        ORDER BY fecha DESC, idConsulta DESC
+        LIMIT 1
+    </select>
+    <select id="buscar" resultMap="consultaMap" parameterType="map">
+        SELECT idConsulta, idPaciente, idMedico, idCita, idDieta, fecha, pesoCapturado, tallaCapturada, imcCalculado, observaciones
+        FROM consulta
+        <where>
+            <if test="idPaciente != null">
+                AND idPaciente = #{idPaciente}
+            </if>
+            <if test="idMedico != null">
+                AND idMedico = #{idMedico}
+            </if>
+            <if test="fecha != null and fecha != ''">
+                AND fecha = #{fecha}
+            </if>
+        </where>
+        ORDER BY fecha DESC, idConsulta DESC
+    </select>
 </mapper>

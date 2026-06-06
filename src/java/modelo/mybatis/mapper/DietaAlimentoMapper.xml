@@ -9,23 +9,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="idAlimento" column="idAlimento"/>
         <result property="porcion" column="porcion"/>
         <result property="caloriasPorcion" column="caloriasPorcion"/>
+        <result property="tiempoComida" column="tiempoComida"/>
     </resultMap>
 
     <select id="listar" resultMap="dietaAlimentoMap">
-        SELECT idDietaAlimento, idDieta, idAlimento, porcion, caloriasPorcion
+        SELECT idDietaAlimento, idDieta, idAlimento, porcion, caloriasPorcion, tiempoComida
         FROM dietaAlimento
         ORDER BY idDietaAlimento
     </select>
 
     <select id="obtenerPorId" parameterType="int" resultMap="dietaAlimentoMap">
-        SELECT idDietaAlimento, idDieta, idAlimento, porcion, caloriasPorcion
+        SELECT idDietaAlimento, idDieta, idAlimento, porcion, caloriasPorcion, tiempoComida
         FROM dietaAlimento
         WHERE idDietaAlimento = #{idDietaAlimento}
     </select>
 
     <insert id="insertar" parameterType="pojo.DietaAlimento" useGeneratedKeys="true" keyProperty="idDietaAlimento" keyColumn="idDietaAlimento">
-        INSERT INTO dietaAlimento (idDieta, idAlimento, porcion, caloriasPorcion)
-        VALUES (#{idDieta}, #{idAlimento}, #{porcion}, #{caloriasPorcion})
+        INSERT INTO dietaAlimento (idDieta, idAlimento, porcion, caloriasPorcion, tiempoComida)
+        VALUES (#{idDieta}, #{idAlimento}, #{porcion}, #{caloriasPorcion}, #{tiempoComida})
     </insert>
 
     <update id="actualizar" parameterType="pojo.DietaAlimento">
@@ -33,7 +34,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SET idDieta = #{idDieta},
             idAlimento = #{idAlimento},
             porcion = #{porcion},
-            caloriasPorcion = #{caloriasPorcion}
+            caloriasPorcion = #{caloriasPorcion},
+            tiempoComida = #{tiempoComida}
         WHERE idDietaAlimento = #{idDietaAlimento}
     </update>
 

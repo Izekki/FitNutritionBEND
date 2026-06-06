@@ -5,6 +5,7 @@ import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -73,5 +74,37 @@ public class PacientesWS {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ELIMINADO, eliminado);
+    }
+
+    @GET
+    @Path("buscar")
+    public List<Paciente> buscarPacientes(
+            @QueryParam("nombre") String nombre,
+            @QueryParam("email") String email,
+            @QueryParam("idMedico") Integer idMedico,
+            @QueryParam("estatus") String estatus) {
+        return PacienteImp.buscarPacientes(nombre, email, idMedico, estatus);
+    }
+
+    @PUT
+    @Path("{idPaciente}/perfil-movil")
+    public Respuesta actualizarPerfilMovil(@PathParam("idPaciente") Integer idPaciente, Paciente paciente) {
+        if (idPaciente == null || idPaciente <= 0 || paciente == null) {
+            throw new BadRequestException("Datos inválidos");
+        }
+        Paciente actual = PacienteImp.obtenerPaciente(idPaciente);
+        if (actual == null) {
+            return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
+        }
+        paciente.setIdMedico(actual.getIdMedico());
+        paciente.setEstatus(actual.getEstatus());
+        if (paciente.getCodigoAcceso() == null || paciente.getCodigoAcceso().trim().isEmpty()) {
+            paciente.setCodigoAcceso(actual.getCodigoAcceso());
+        }
+        Paciente actualizado = PacienteImp.actualizarPaciente(idPaciente, paciente);
+        if (actualizado == null) {
+            return new Respuesta(true, "Error al actualizar el perfil móvil", null);
+        }
+        return new Respuesta(false, Constantes.MSJ_REGISTRO_ACTUALIZADO, actualizado);
     }
 }

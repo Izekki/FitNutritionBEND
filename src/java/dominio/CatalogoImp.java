@@ -172,4 +172,19 @@ public class CatalogoImp {
         }
         return null;
     }
+
+    public static List<Alimento> buscarAlimentos(String nombre) {
+        List<Alimento> alimentos = null;
+        SqlSession conexionBD = MybatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                java.util.Map<String, Object> params = new java.util.HashMap<>();
+                params.put("nombre", nombre);
+                alimentos = conexionBD.selectList("alimento.buscar", params);
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return alimentos;
+    }
 }

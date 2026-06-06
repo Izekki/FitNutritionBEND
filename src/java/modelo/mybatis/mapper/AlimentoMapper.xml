@@ -45,4 +45,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         DELETE FROM alimento
         WHERE idAlimento = #{idAlimento}
     </delete>
+    <select id="buscar" resultMap="alimentoMap" parameterType="map">
+        SELECT idAlimento, nombreAlimento, calorias, porcion, proteinas, carbohidratos, grasas
+        FROM alimento
+        <where>
+            <if test="nombre != null and nombre != ''">
+                AND nombreAlimento LIKE CONCAT('%', #{nombre}, '%')
+            </if>
+        </where>
+        ORDER BY nombreAlimento
+    </select>
 </mapper>

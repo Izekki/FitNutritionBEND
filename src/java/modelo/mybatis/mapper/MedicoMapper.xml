@@ -100,4 +100,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SET idMedico = #{idMedicoDestino}
         WHERE idMedico = #{idMedicoOrigen}
     </update>
+    <select id="buscar" resultMap="medicoMap" parameterType="map">
+        SELECT idMedico, numPersonal, cedulaProfesional, nombreMedico, apellidosMedico,
+               fechaNacimiento, genero, email, telefono, domicilio, fotografia, estatus
+        FROM medico
+        <where>
+            <if test="nombre != null and nombre != ''">
+                AND (nombreMedico LIKE CONCAT('%', #{nombre}, '%') OR apellidosMedico LIKE CONCAT('%', #{nombre}, '%'))
+            </if>
+            <if test="numPersonal != null">
+                AND numPersonal = #{numPersonal}
+            </if>
+            <if test="cedulaProfesional != null and cedulaProfesional != ''">
+                AND cedulaProfesional LIKE CONCAT('%', #{cedulaProfesional}, '%')
+            </if>
+            <if test="estatus != null and estatus != ''">
+                AND estatus = #{estatus}
+            </if>
+        </where>
+        ORDER BY idMedico
+    </select>
+
+    <select id="contarPacientesActivos" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM paciente
+        WHERE idMedico = #{idMedico} AND estatus = 'Activo'
+    </select>
 </mapper>

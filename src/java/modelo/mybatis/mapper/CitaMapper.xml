@@ -47,4 +47,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         DELETE FROM cita
         WHERE idCita = #{idCita}
     </delete>
+    <select id="buscar" resultMap="citaMap" parameterType="map">
+        SELECT idCita, idPaciente, idMedico, idMedicoAnterior, fecha, hora, estado, observaciones
+        FROM cita
+        <where>
+            <if test="fecha != null and fecha != ''">
+                AND fecha = #{fecha}
+            </if>
+            <if test="idPaciente != null">
+                AND idPaciente = #{idPaciente}
+            </if>
+            <if test="idMedico != null">
+                AND idMedico = #{idMedico}
+            </if>
+            <if test="estado != null and estado != ''">
+                AND estado = #{estado}
+            </if>
+        </where>
+        ORDER BY fecha DESC, hora DESC
+    </select>
+
+    <select id="obtenerPorPaciente" parameterType="int" resultMap="citaMap">
+        SELECT idCita, idPaciente, idMedico, idMedicoAnterior, fecha, hora, estado, observaciones
+        FROM cita
+        WHERE idPaciente = #{idPaciente}
+        ORDER BY fecha DESC, hora DESC
+    </select>
 </mapper>

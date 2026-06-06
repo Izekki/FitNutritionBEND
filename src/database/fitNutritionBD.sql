@@ -149,11 +149,12 @@ CREATE TABLE dietaAlimento (
     idDietaAlimento INT AUTO_INCREMENT,
     idDieta INT NOT NULL,
     idAlimento INT NOT NULL,
-    porcion VARCHAR(50)NOT NULL,
+    porcion VARCHAR(50) NOT NULL,
     caloriasPorcion DECIMAL(6,2) NOT NULL,
+    tiempoComida VARCHAR(50) NOT NULL,
     PRIMARY KEY(idDietaAlimento),
 
-    UNIQUE(idDieta, idAlimento),
+    UNIQUE(idDieta, idAlimento, tiempoComida),
     
     CONSTRAINT `fk_dietaAlimento_Dieta` FOREIGN KEY(idDieta) REFERENCES dieta(idDieta) ON DELETE CASCADE,
     CONSTRAINT `fk_DietaAlimento_Alimento` FOREIGN KEY(idAlimento) REFERENCES alimento(idAlimento) ON DELETE CASCADE
@@ -186,5 +187,5 @@ VALUES (1, 1, 1, 1, '2026-05-20', 62.50, 1.65, 22.96, 'Paciente con buen estado 
 INSERT INTO alimento (nombreAlimento, calorias, porcion, proteinas, carbohidratos, grasas) 
 VALUES ('Pechuga de pollo', 165.00, '100g', 31.00, 0.00, 3.60), ('Arroz blanco', 130.00, '100g', 2.70, 28.00, 0.30), ('Manzana', 52.00, '1 pieza', 0.30, 14.00, 0.20);
 
-INSERT INTO dietaAlimento (idDieta, idAlimento, porcion, caloriasPorcion) 
-VALUES (1, 1, '150g', 247.50), (1, 2, '200g', 260.00), (1, 3, '1 pieza', 52.00);
+INSERT INTO dietaAlimento (idDieta, idAlimento, porcion, caloriasPorcion, tiempoComida) 
+VALUES (1, 1, '150g', 247.50, 'Comida'), (1, 2, '200g', 260.00, 'Comida'), (1, 3, '1 pieza', 52.00, 'Colacion1');

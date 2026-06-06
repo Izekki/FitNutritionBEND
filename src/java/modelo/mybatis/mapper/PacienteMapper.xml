@@ -111,4 +111,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             idMedico = #{idMedicoDestino}
         WHERE idPaciente = #{idPaciente} AND idMedico = #{idMedicoOrigen}
     </update>
+    <select id="buscar" resultMap="pacienteMap" parameterType="map">
+        SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
+               peso, estatura, talla, email, telefono, domicilio, fotografia, estatus
+        FROM paciente
+        <where>
+            <if test="nombre != null and nombre != ''">
+                AND (nombrePaciente LIKE CONCAT('%', #{nombre}, '%') OR apellidosPaciente LIKE CONCAT('%', #{nombre}, '%'))
+            </if>
+            <if test="email != null and email != ''">
+                AND email LIKE CONCAT('%', #{email}, '%')
+            </if>
+            <if test="idMedico != null">
+                AND idMedico = #{idMedico}
+            </if>
+            <if test="estatus != null and estatus != ''">
+                AND estatus = #{estatus}
+            </if>
+        </where>
+        ORDER BY idPaciente
+    </select>
 </mapper>

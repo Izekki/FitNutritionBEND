@@ -5,6 +5,7 @@ import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -73,5 +74,37 @@ public class ConsultasWS {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ELIMINADO, eliminada);
+    }
+
+    @GET
+    @Path("paciente/{idPaciente}")
+    public List<pojo.Consulta> listarPorPaciente(@PathParam("idPaciente") Integer idPaciente) {
+        if (idPaciente == null || idPaciente <= 0) {
+            throw new BadRequestException("ID de paciente requerido");
+        }
+        return ConsultaImp.listarPorPaciente(idPaciente);
+    }
+
+    @GET
+    @Path("paciente/{idPaciente}/ultima")
+    public Response obtenerUltimaPorPaciente(@PathParam("idPaciente") Integer idPaciente) {
+        if (idPaciente == null || idPaciente <= 0) {
+            throw new BadRequestException("ID de paciente requerido");
+        }
+        pojo.Consulta consulta = ConsultaImp.obtenerUltimaPorPaciente(idPaciente);
+        if (consulta == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new Respuesta(true, "No se encontraron consultas para este paciente", null)).build();
+        }
+        return Response.ok(consulta).build();
+    }
+
+    @GET
+    @Path("buscar")
+    public List<pojo.Consulta> buscarConsultas(
+            @QueryParam("idPaciente") Integer idPaciente,
+            @QueryParam("idMedico") Integer idMedico,
+            @QueryParam("fecha") String fecha) {
+        return ConsultaImp.buscarConsultas(idPaciente, idMedico, fecha);
     }
 }

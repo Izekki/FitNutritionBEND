@@ -102,4 +102,22 @@ public class PacienteImp {
         }
         return null;
     }
+
+    public static List<Paciente> buscarPacientes(String nombre, String email, Integer idMedico, String estatus) {
+        List<Paciente> pacientes = null;
+        SqlSession conexionBD = MybatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                java.util.Map<String, Object> params = new java.util.HashMap<>();
+                params.put("nombre", nombre);
+                params.put("email", email);
+                params.put("idMedico", idMedico);
+                params.put("estatus", estatus);
+                pacientes = conexionBD.selectList("paciente.buscar", params);
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return pacientes;
+    }
 }
