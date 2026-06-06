@@ -41,6 +41,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE idAdministrador = #{idAdministrador}
     </update>
 
+    <update id="actualizarContrasena" parameterType="map">
+        UPDATE administrador
+        SET contrasena = #{contrasena}
+        WHERE idAdministrador = #{idAdministrador}
+    </update>
+
     <delete id="eliminar" parameterType="int">
         DELETE FROM administrador
         WHERE idAdministrador = #{idAdministrador}

@@ -80,6 +80,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE idPaciente = #{idPaciente}
     </update>
 
+    <update id="actualizarFotografia" parameterType="map">
+        UPDATE paciente
+        SET fotografia = #{fotografia}
+        WHERE idPaciente = #{idPaciente}
+    </update>
+
+    <update id="actualizarContrasena" parameterType="map">
+        UPDATE paciente
+        SET codigoAcceso = #{codigoAcceso}
+        WHERE idPaciente = #{idPaciente}
+    </update>
+
     <delete id="eliminar" parameterType="int">
         DELETE FROM paciente
         WHERE idPaciente = #{idPaciente}

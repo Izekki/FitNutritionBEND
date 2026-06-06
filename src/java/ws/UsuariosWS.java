@@ -2,6 +2,8 @@ package ws;
 
 import dominio.AutenticacionImp;
 import dto.RSAutenticacionUsuario;
+import dto.Respuesta;
+import dto.PeticionCambiarContrasena;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -32,5 +34,21 @@ public class UsuariosWS {
             throw new BadRequestException("Se requieren email y codigoAcceso");
         }
         return AutenticacionImp.autenticarPacienteMovil(credenciales.getEmail(), credenciales.getCodigoAcceso());
+    }
+
+    @POST
+    @Path("cerrar-sesion")
+    public Respuesta cerrarSesion() {
+        return new Respuesta(false, "Sesión cerrada exitosamente");
+    }
+
+    @POST
+    @Path("cambiar-contrasena")
+    public Respuesta cambiarContrasena(PeticionCambiarContrasena peticion) {
+        if (peticion == null || peticion.getId() == null || peticion.getRol() == null 
+                || peticion.getContrasenaActual() == null || peticion.getContrasenaNueva() == null) {
+            throw new BadRequestException("Se requieren id, rol, contrasenaActual y contrasenaNueva");
+        }
+        return AutenticacionImp.cambiarContrasena(peticion);
     }
 }

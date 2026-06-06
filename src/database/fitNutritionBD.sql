@@ -28,6 +28,7 @@ CREATE TABLE `medico`  (
   `telefono` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `domicilio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `fotografia` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
+  `estatus` ENUM('Activo','Inactivo') NOT NULL DEFAULT 'Activo',
   PRIMARY KEY (`idMedico`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
@@ -50,6 +51,7 @@ CREATE TABLE `paciente`  (
   `domicilio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `fotografia` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
   `codigoAcceso` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `estatus` ENUM('Activo','Inactivo') NOT NULL DEFAULT 'Activo',
   PRIMARY KEY (`idPaciente`) USING BTREE,
 
   CONSTRAINT `fk_medicoPaciente` FOREIGN KEY (`idMedico`) REFERENCES `medico` (`idMedico`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -164,11 +166,11 @@ SET FOREIGN_KEY_CHECKS = 1;
 INSERT INTO administrador (email, contrasena, nombreAdmin) 
 VALUES ('miguellmrjilo@gmail.com', SHA2('admin123',256), 'Teo');
 
-INSERT INTO medico (numPersonal, cedulaProfesional, nombreMedico, apellidosMedico, contrasena, fechaNacimiento, genero, email, telefono, domicilio, fotografia) 
-VALUES (1001, 'CED123456', 'Carlos', 'Ramirez Lopez', SHA2('medico123',256), '1980-05-10', 'M', 'carlos.ramirez@fitnutrition.com', '2281234567', 'Xalapa, Veracruz', 'medico1.jpg');
+INSERT INTO medico (numPersonal, cedulaProfesional, nombreMedico, apellidosMedico, contrasena, fechaNacimiento, genero, email, telefono, domicilio, fotografia, estatus) 
+VALUES (1001, 'CED123456', 'Carlos', 'Ramirez Lopez', SHA2('medico123',256), '1980-05-10', 'M', 'carlos.ramirez@fitnutrition.com', '2281234567', 'Xalapa, Veracruz', 'medico1.jpg', 'Activo');
 
-INSERT INTO paciente (idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero, peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso) 
-VALUES (1, 'Ana', 'Martinez Gomez', '2000-08-15', 'F', 62.50, 1.65, 28.00, 'ana.martinez@gmail.com', '2289876543', 'Coatepec, Veracruz', 'paciente1.jpg', '1234');
+INSERT INTO paciente (idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero, peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso, estatus) 
+VALUES (1, 'Ana', 'Martinez Gomez', '2000-08-15', 'F', 62.50, 1.65, 28.00, 'ana.martinez@gmail.com', '2289876543', 'Coatepec, Veracruz', 'paciente1.jpg', '1234', 'Activo');
 
 INSERT INTO dieta (nombreDieta, caloriasTotales, descripcion, estatusEdicion) 
 VALUES ('Dieta Balanceada', 2200.00, 'Plan alimenticio balanceado para mantenimiento.', 'Editable');
