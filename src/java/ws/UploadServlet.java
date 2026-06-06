@@ -19,11 +19,10 @@ import javax.servlet.http.Part;
 import modelo.mybatis.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
 
-@WebServlet(name = "UploadServlet", urlPatterns = {"/uploads/*"})
-@MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
-    maxFileSize = 1024 * 1024 * 10,       // 10MB
-    maxRequestSize = 1024 * 1024 * 50     // 50MB
+@WebServlet(name = "UploadServlet", urlPatterns = { "/uploads/*" })
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
 )
 public class UploadServlet extends HttpServlet {
 
@@ -43,13 +42,14 @@ public class UploadServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         // Se valida que la ruta sea /upload
         String pathInfo = request.getPathInfo();
         if (pathInfo == null || !pathInfo.equals("/upload")) {
-            sendError(response, HttpServletResponse.SC_NOT_FOUND, "Recurso no encontrado. La ruta esperada es POST /uploads/upload");
+            sendError(response, HttpServletResponse.SC_NOT_FOUND,
+                    "Recurso no encontrado. La ruta esperada es POST /uploads/upload");
             return;
         }
 
@@ -57,7 +57,8 @@ public class UploadServlet extends HttpServlet {
         try {
             filePart = request.getPart("file");
         } catch (Exception e) {
-            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "No se pudo recuperar la parte 'file' de la solicitud multipart: " + e.getMessage());
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST,
+                    "No se pudo recuperar la parte 'file' de la solicitud multipart: " + e.getMessage());
             return;
         }
 
@@ -65,13 +66,15 @@ public class UploadServlet extends HttpServlet {
         String idStr = request.getParameter("id");
 
         if (filePart == null || entityType == null || idStr == null) {
-            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Parámetros requeridos faltantes: file (binario), entityType (medico|paciente), id (numérico)");
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST,
+                    "Parámetros requeridos faltantes: file (binario), entityType (medico|paciente), id (numérico)");
             return;
         }
 
         entityType = entityType.trim().toLowerCase();
         if (!"medico".equals(entityType) && !"paciente".equals(entityType)) {
-            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "El parámetro 'entityType' debe ser 'medico' o 'paciente'");
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST,
+                    "El parámetro 'entityType' debe ser 'medico' o 'paciente'");
             return;
         }
 
@@ -79,11 +82,12 @@ public class UploadServlet extends HttpServlet {
         try {
             id = Integer.parseInt(idStr);
         } catch (NumberFormatException e) {
-            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "El parámetro 'id' debe ser un número entero válido");
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST,
+                    "El parámetro 'id' debe ser un número entero válido");
             return;
         }
 
-        String submittedFileName = filePart.getSubmittedFileName();
+        String submittedFileName = getSubmittedFileName(filePart);
         if (submittedFileName == null || submittedFileName.trim().isEmpty()) {
             sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Nombre de archivo de carga inválido");
             return;
@@ -96,7 +100,8 @@ public class UploadServlet extends HttpServlet {
         }
 
         if (!".jpg".equals(extension) && !".jpeg".equals(extension) && !".png".equals(extension)) {
-            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Formato de archivo no soportado. Debe ser JPG, JPEG o PNG");
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST,
+                    "Formato de archivo no soportado. Debe ser JPG, JPEG o PNG");
             return;
         }
 
@@ -106,14 +111,15 @@ public class UploadServlet extends HttpServlet {
 
         // Guardar físicamente el archivo en el servidor
         try (InputStream input = filePart.getInputStream();
-             OutputStream output = new FileOutputStream(storeFile)) {
+                OutputStream output = new FileOutputStream(storeFile)) {
             byte[] buffer = new byte[4096];
             int bytesRead;
             while ((bytesRead = input.read(buffer)) != -1) {
                 output.write(buffer, 0, bytesRead);
             }
         } catch (IOException e) {
-            sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No se pudo guardar físicamente el archivo en el servidor: " + e.getMessage());
+            sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "No se pudo guardar físicamente el archivo en el servidor: " + e.getMessage());
             return;
         }
 
@@ -145,7 +151,8 @@ public class UploadServlet extends HttpServlet {
                 if (storeFile.exists()) {
                     storeFile.delete();
                 }
-                sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error en la transacción de base de datos, transacción abortada: " + e.getMessage());
+                sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "Error en la transacción de base de datos, transacción abortada: " + e.getMessage());
                 return;
             } finally {
                 conexionBD.close();
@@ -154,7 +161,8 @@ public class UploadServlet extends HttpServlet {
             if (storeFile.exists()) {
                 storeFile.delete();
             }
-            sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No se pudo establecer la sesión con la base de datos");
+            sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "No se pudo establecer la sesión con la base de datos");
             return;
         }
 
@@ -162,7 +170,8 @@ public class UploadServlet extends HttpServlet {
             if (storeFile.exists()) {
                 storeFile.delete();
             }
-            sendError(response, HttpServletResponse.SC_NOT_FOUND, "No se encontró ningún registro para la entidad '" + entityType + "' con ID: " + id);
+            sendError(response, HttpServletResponse.SC_NOT_FOUND,
+                    "No se encontró ningún registro para la entidad '" + entityType + "' con ID: " + id);
             return;
         }
 
@@ -170,9 +179,9 @@ public class UploadServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String pathInfo = request.getPathInfo();
         if (pathInfo == null || pathInfo.equals("/")) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Nombre de archivo faltante en la URL");
@@ -180,7 +189,8 @@ public class UploadServlet extends HttpServlet {
         }
 
         if (!pathInfo.startsWith("/ver/")) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ruta inválida. Formato esperado: GET /uploads/ver/{fileName}");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Ruta inválida. Formato esperado: GET /uploads/ver/{fileName}");
             return;
         }
 
@@ -192,7 +202,8 @@ public class UploadServlet extends HttpServlet {
 
         // Sanitización contra Directory Traversal
         if (fileName.contains("..") || fileName.contains("/") || fileName.contains("\\")) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Petición inválida y rechazada por motivos de seguridad");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Petición inválida y rechazada por motivos de seguridad");
             return;
         }
 
@@ -212,10 +223,10 @@ public class UploadServlet extends HttpServlet {
         }
 
         response.setContentType(contentType);
-        response.setContentLengthLong(file.length());
+        response.setContentLength((int) file.length());
 
         try (InputStream in = new FileInputStream(file);
-             OutputStream out = response.getOutputStream()) {
+                OutputStream out = response.getOutputStream()) {
             byte[] buffer = new byte[4096];
             int bytesRead;
             while ((bytesRead = in.read(buffer)) != -1) {
@@ -239,9 +250,29 @@ public class UploadServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            out.print(String.format("{\"error\":false,\"mensaje\":\"%s\",\"fileName\":\"%s\"}", 
-                message.replace("\"", "\\\""), fileName.replace("\"", "\\\"")));
+            out.print(String.format("{\"error\":false,\"mensaje\":\"%s\",\"fileName\":\"%s\"}",
+                    message.replace("\"", "\\\""), fileName.replace("\"", "\\\"")));
             out.flush();
         }
+    }
+
+    private String getSubmittedFileName(Part filePart) {
+        String contentDisposition = filePart.getHeader("content-disposition");
+        if (contentDisposition == null) {
+            return null;
+        }
+
+        for (String value : contentDisposition.split(";")) {
+            String trimmedValue = value.trim();
+            if (trimmedValue.startsWith("filename")) {
+                String fileName = trimmedValue.substring(trimmedValue.indexOf('=') + 1).trim();
+                if (fileName.startsWith("\"") && fileName.endsWith("\"") && fileName.length() >= 2) {
+                    fileName = fileName.substring(1, fileName.length() - 1);
+                }
+                return new File(fileName).getName();
+            }
+        }
+
+        return null;
     }
 }
