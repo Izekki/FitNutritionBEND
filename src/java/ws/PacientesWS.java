@@ -98,8 +98,13 @@ public class PacientesWS {
         }
         paciente.setIdMedico(actual.getIdMedico());
         paciente.setEstatus(actual.getEstatus());
-        // El código de acceso no debe ser modificado por este endpoint
         paciente.setCodigoAcceso(actual.getCodigoAcceso());
+        paciente.setFechaNacimiento(actual.getFechaNacimiento());
+        paciente.setGenero(actual.getGenero());
+        paciente.setPeso(actual.getPeso());
+        paciente.setEstatura(actual.getEstatura());
+        paciente.setTalla(actual.getTalla());
+        paciente.setFotografia(actual.getFotografia());
         Paciente actualizado = PacienteImp.actualizarPaciente(idPaciente, paciente);
         if (actualizado == null) {
             return new Respuesta(true, "Error al actualizar el perfil móvil", null);
