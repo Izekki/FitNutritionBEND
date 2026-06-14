@@ -126,6 +126,10 @@ public class CitaImp {
             return new dto.Respuesta(true, "Cita no encontrada");
         }
 
+        if ("Cancelada".equalsIgnoreCase(cita.getEstado())) {
+            return new dto.Respuesta(true, "Esta cita ya fue cancelada anteriormente.");
+        }
+
         String fechaStr = cita.getFecha();
         String horaStr = cita.getHora();
         if (fechaStr == null || horaStr == null) {
