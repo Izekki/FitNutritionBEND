@@ -56,11 +56,19 @@ public class MedicosWS {
         if (idMedico == null || idMedico <= 0 || medico == null) {
             throw new BadRequestException("Datos inválidos");
         }
-        Medico actualizado = MedicoImp.actualizarMedico(idMedico, medico);
-        if (actualizado == null) {
-            return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
+        try {
+            Medico actualizado = MedicoImp.actualizarMedico(idMedico, medico);
+            if (actualizado == null) {
+                return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
+            }
+            return new Respuesta(false, Constantes.MSJ_REGISTRO_ACTUALIZADO, actualizado);
+        } catch (RuntimeException e) {
+            String msg = e.getMessage();
+            if (e.getCause() != null && e.getCause().getMessage() != null) {
+                msg = e.getCause().getMessage();
+            }
+            return new Respuesta(true, msg != null ? msg : Constantes.MSJ_ERROR_BD, null);
         }
-        return new Respuesta(false, Constantes.MSJ_REGISTRO_ACTUALIZADO, actualizado);
     }
 
     @DELETE

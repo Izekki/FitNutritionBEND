@@ -60,6 +60,15 @@ public class MedicoImp {
         if (conexionBD != null) {
             try {
                 medico.setIdMedico(idMedico);
+                if ("Inactivo".equalsIgnoreCase(medico.getEstatus())) {
+                    Medico actual = conexionBD.selectOne("medico.obtenerPorId", idMedico);
+                    if (actual != null && "Activo".equalsIgnoreCase(actual.getEstatus())) {
+                        int countPatients = conexionBD.selectOne("medico.contarPacientesActivos", idMedico);
+                        if (countPatients > 0) {
+                            throw new IllegalStateException("No se puede dar de baja al médico porque aún tiene pacientes activos asignados. Reasígnelos primero.");
+                        }
+                    }
+                }
                 if (medico.getContrasena() != null) {
                     medico.setContrasena(Utilidades.hashPassword(medico.getContrasena()));
                 }
@@ -68,7 +77,7 @@ public class MedicoImp {
                 return filas > 0 ? medico : null;
             } catch (Exception e) {
                 conexionBD.rollback();
-                throw new RuntimeException(e);
+                throw new RuntimeException(e.getMessage() != null ? e.getMessage() : e.toString(), e);
             } finally {
                 conexionBD.close();
             }
