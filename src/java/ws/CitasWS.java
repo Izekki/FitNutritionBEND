@@ -78,11 +78,11 @@ public class CitasWS {
 
     @PUT
     @Path("{idCita}/cancelar")
-    public Respuesta cancelarCita(@PathParam("idCita") Integer idCita, java.util.Map<String, String> payload) {
-        if (idCita == null || idCita <= 0 || payload == null || !payload.containsKey("motivo")) {
+    public Respuesta cancelarCita(@PathParam("idCita") Integer idCita, dto.PeticionCancelarCita payload) {
+        if (idCita == null || idCita <= 0 || payload == null || payload.getMotivo() == null || payload.getMotivo().trim().isEmpty()) {
             throw new BadRequestException("ID de cita y motivo de cancelación requeridos");
         }
-        String motivo = payload.get("motivo");
+        String motivo = payload.getMotivo();
         return CitaImp.cancelarCita(idCita, motivo);
     }
 
