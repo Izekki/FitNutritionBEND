@@ -98,13 +98,32 @@ public class PacientesWS {
         }
         paciente.setIdMedico(actual.getIdMedico());
         paciente.setEstatus(actual.getEstatus());
-        if (paciente.getCodigoAcceso() == null || paciente.getCodigoAcceso().trim().isEmpty()) {
-            paciente.setCodigoAcceso(actual.getCodigoAcceso());
-        }
+        // El código de acceso no debe ser modificado por este endpoint
+        paciente.setCodigoAcceso(actual.getCodigoAcceso());
         Paciente actualizado = PacienteImp.actualizarPaciente(idPaciente, paciente);
         if (actualizado == null) {
             return new Respuesta(true, "Error al actualizar el perfil móvil", null);
         }
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ACTUALIZADO, actualizado);
+    }
+
+    @PUT
+    @Path("{idPaciente}/codigo-acceso")
+    public Respuesta actualizarCodigoAcceso(@PathParam("idPaciente") Integer idPaciente, dto.PeticionCodigoAcceso payload) {
+        if (idPaciente == null || idPaciente <= 0 || payload == null || payload.getCodigoAcceso() == null || payload.getCodigoAcceso().trim().isEmpty()) {
+            throw new BadRequestException("Datos inválidos");
+        }
+        String nuevoCodigo = payload.getCodigoAcceso().trim();
+        Paciente actual = PacienteImp.obtenerPaciente(idPaciente);
+        if (actual == null) {
+            return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
+        }
+        
+        actual.setCodigoAcceso(nuevoCodigo);
+        Paciente actualizado = PacienteImp.actualizarPaciente(idPaciente, actual);
+        if (actualizado == null) {
+            return new Respuesta(true, "Error al actualizar el código de acceso", null);
+        }
+        return new Respuesta(false, "Código de acceso actualizado exitosamente", actualizado);
     }
 }
