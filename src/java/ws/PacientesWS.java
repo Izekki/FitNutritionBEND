@@ -119,6 +119,9 @@ public class PacientesWS {
             throw new BadRequestException("Datos inválidos");
         }
         String nuevoCodigo = payload.getCodigoAcceso().trim();
+        if (!nuevoCodigo.matches("^\\d{1,4}$")) {
+            throw new BadRequestException("El código de acceso debe ser puramente numérico y tener un máximo de 4 dígitos.");
+        }
         Paciente actual = PacienteImp.obtenerPaciente(idPaciente);
         if (actual == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
