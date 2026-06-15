@@ -115,13 +115,26 @@ public class PacientesWS {
     @PUT
     @Path("{idPaciente}/codigo-acceso")
     public Respuesta actualizarCodigoAcceso(@PathParam("idPaciente") Integer idPaciente, dto.PeticionCodigoAcceso payload) {
-        if (idPaciente == null || idPaciente <= 0 || payload == null || payload.getCodigoAcceso() == null || payload.getCodigoAcceso().trim().isEmpty()) {
+        if (idPaciente == null || idPaciente <= 0 || payload == null 
+                || payload.getCodigoActual() == null || payload.getCodigoActual().trim().isEmpty()
+                || payload.getCodigoAcceso() == null || payload.getCodigoAcceso().trim().isEmpty()) {
             throw new BadRequestException("Datos inválidos");
         }
+        String codigoActual = payload.getCodigoActual().trim();
         String nuevoCodigo = payload.getCodigoAcceso().trim();
+        
+        if (!nuevoCodigo.matches("^\\d{1,4}$")) {
+            throw new BadRequestException("El código de acceso debe ser puramente numérico y tener un máximo de 4 dígitos.");
+        }
+        
         Paciente actual = PacienteImp.obtenerPaciente(idPaciente);
         if (actual == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
+        }
+        
+        // Validación del código de acceso actual
+        if (!actual.getCodigoAcceso().equals(codigoActual)) {
+            return new Respuesta(true, "El código de acceso actual es incorrecto", null);
         }
         
         actual.setCodigoAcceso(nuevoCodigo);
