@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="obtenerPorId" parameterType="int" resultMap="pacienteMap">
         SELECT idPaciente, idMedico, nombrePaciente, apellidosPaciente, fechaNacimiento, genero,
-               peso, estatura, talla, email, telefono, domicilio, fotografia, estatus
+               peso, estatura, talla, email, telefono, domicilio, fotografia, codigoAcceso, estatus
         FROM paciente
         WHERE idPaciente = #{idPaciente}
     </select>

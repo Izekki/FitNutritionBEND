@@ -39,6 +39,7 @@ public class PacientesWS {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null)).build();
         }
+        paciente.setCodigoAcceso(null);
         return Response.ok(paciente).build();
     }
 
@@ -47,7 +48,11 @@ public class PacientesWS {
         if (paciente == null) {
             throw new BadRequestException("Paciente requerido");
         }
-        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, PacienteImp.guardarPaciente(paciente));
+        Paciente guardado = PacienteImp.guardarPaciente(paciente);
+        if (guardado != null) {
+            guardado.setCodigoAcceso(null);
+        }
+        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, guardado);
     }
 
     @PUT
@@ -60,6 +65,7 @@ public class PacientesWS {
         if (actualizado == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
+        actualizado.setCodigoAcceso(null);
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ACTUALIZADO, actualizado);
     }
 
@@ -73,6 +79,7 @@ public class PacientesWS {
         if (eliminado == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
+        eliminado.setCodigoAcceso(null);
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ELIMINADO, eliminado);
     }
 
@@ -96,19 +103,27 @@ public class PacientesWS {
         if (actual == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
-        paciente.setIdMedico(actual.getIdMedico());
-        paciente.setEstatus(actual.getEstatus());
-        paciente.setCodigoAcceso(actual.getCodigoAcceso());
-        paciente.setFechaNacimiento(actual.getFechaNacimiento());
-        paciente.setGenero(actual.getGenero());
-        paciente.setPeso(actual.getPeso());
-        paciente.setEstatura(actual.getEstatura());
-        paciente.setTalla(actual.getTalla());
-        paciente.setFotografia(actual.getFotografia());
-        Paciente actualizado = PacienteImp.actualizarPaciente(idPaciente, paciente);
+        // Mezclar únicamente los campos editables que no sean nulos o vacíos en el registro existente
+        if (paciente.getNombrePaciente() != null && !paciente.getNombrePaciente().trim().isEmpty()) {
+            actual.setNombrePaciente(paciente.getNombrePaciente().trim());
+        }
+        if (paciente.getApellidosPaciente() != null && !paciente.getApellidosPaciente().trim().isEmpty()) {
+            actual.setApellidosPaciente(paciente.getApellidosPaciente().trim());
+        }
+        if (paciente.getEmail() != null && !paciente.getEmail().trim().isEmpty()) {
+            actual.setEmail(paciente.getEmail().trim());
+        }
+        if (paciente.getTelefono() != null && !paciente.getTelefono().trim().isEmpty()) {
+            actual.setTelefono(paciente.getTelefono().trim());
+        }
+        if (paciente.getDomicilio() != null && !paciente.getDomicilio().trim().isEmpty()) {
+            actual.setDomicilio(paciente.getDomicilio().trim());
+        }
+        Paciente actualizado = PacienteImp.actualizarPaciente(idPaciente, actual);
         if (actualizado == null) {
             return new Respuesta(true, "Error al actualizar el perfil móvil", null);
         }
+        actualizado.setCodigoAcceso(null);
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ACTUALIZADO, actualizado);
     }
 
@@ -133,7 +148,7 @@ public class PacientesWS {
         }
         
         // Validación del código de acceso actual
-        if (!actual.getCodigoAcceso().equals(codigoActual)) {
+        if (actual.getCodigoAcceso() == null || !actual.getCodigoAcceso().equals(codigoActual)) {
             return new Respuesta(true, "El código de acceso actual es incorrecto", null);
         }
         
@@ -142,6 +157,7 @@ public class PacientesWS {
         if (actualizado == null) {
             return new Respuesta(true, "Error al actualizar el código de acceso", null);
         }
+        actualizado.setCodigoAcceso(null);
         return new Respuesta(false, "Código de acceso actualizado exitosamente", actualizado);
     }
 }
