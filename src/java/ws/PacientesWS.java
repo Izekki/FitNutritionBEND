@@ -96,16 +96,23 @@ public class PacientesWS {
         if (actual == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
-        paciente.setIdMedico(actual.getIdMedico());
-        paciente.setEstatus(actual.getEstatus());
-        paciente.setCodigoAcceso(actual.getCodigoAcceso());
-        paciente.setFechaNacimiento(actual.getFechaNacimiento());
-        paciente.setGenero(actual.getGenero());
-        paciente.setPeso(actual.getPeso());
-        paciente.setEstatura(actual.getEstatura());
-        paciente.setTalla(actual.getTalla());
-        paciente.setFotografia(actual.getFotografia());
-        Paciente actualizado = PacienteImp.actualizarPaciente(idPaciente, paciente);
+        // Mezclar únicamente los campos editables que no sean nulos o vacíos en el registro existente
+        if (paciente.getNombrePaciente() != null && !paciente.getNombrePaciente().trim().isEmpty()) {
+            actual.setNombrePaciente(paciente.getNombrePaciente().trim());
+        }
+        if (paciente.getApellidosPaciente() != null && !paciente.getApellidosPaciente().trim().isEmpty()) {
+            actual.setApellidosPaciente(paciente.getApellidosPaciente().trim());
+        }
+        if (paciente.getEmail() != null && !paciente.getEmail().trim().isEmpty()) {
+            actual.setEmail(paciente.getEmail().trim());
+        }
+        if (paciente.getTelefono() != null && !paciente.getTelefono().trim().isEmpty()) {
+            actual.setTelefono(paciente.getTelefono().trim());
+        }
+        if (paciente.getDomicilio() != null && !paciente.getDomicilio().trim().isEmpty()) {
+            actual.setDomicilio(paciente.getDomicilio().trim());
+        }
+        Paciente actualizado = PacienteImp.actualizarPaciente(idPaciente, actual);
         if (actualizado == null) {
             return new Respuesta(true, "Error al actualizar el perfil móvil", null);
         }
