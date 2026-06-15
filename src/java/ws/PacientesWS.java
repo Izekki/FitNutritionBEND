@@ -39,6 +39,7 @@ public class PacientesWS {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null)).build();
         }
+        paciente.setCodigoAcceso(null);
         return Response.ok(paciente).build();
     }
 
@@ -47,7 +48,11 @@ public class PacientesWS {
         if (paciente == null) {
             throw new BadRequestException("Paciente requerido");
         }
-        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, PacienteImp.guardarPaciente(paciente));
+        Paciente guardado = PacienteImp.guardarPaciente(paciente);
+        if (guardado != null) {
+            guardado.setCodigoAcceso(null);
+        }
+        return new Respuesta(false, Constantes.MSJ_REGISTRO_GUARDADO, guardado);
     }
 
     @PUT
@@ -60,6 +65,7 @@ public class PacientesWS {
         if (actualizado == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
+        actualizado.setCodigoAcceso(null);
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ACTUALIZADO, actualizado);
     }
 
@@ -73,6 +79,7 @@ public class PacientesWS {
         if (eliminado == null) {
             return new Respuesta(true, Constantes.MSJ_NO_ENCONTRADO, null);
         }
+        eliminado.setCodigoAcceso(null);
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ELIMINADO, eliminado);
     }
 
@@ -116,6 +123,7 @@ public class PacientesWS {
         if (actualizado == null) {
             return new Respuesta(true, "Error al actualizar el perfil móvil", null);
         }
+        actualizado.setCodigoAcceso(null);
         return new Respuesta(false, Constantes.MSJ_REGISTRO_ACTUALIZADO, actualizado);
     }
 
@@ -149,6 +157,7 @@ public class PacientesWS {
         if (actualizado == null) {
             return new Respuesta(true, "Error al actualizar el código de acceso", null);
         }
+        actualizado.setCodigoAcceso(null);
         return new Respuesta(false, "Código de acceso actualizado exitosamente", actualizado);
     }
 }
