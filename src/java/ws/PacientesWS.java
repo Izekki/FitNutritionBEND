@@ -133,7 +133,7 @@ public class PacientesWS {
         }
         
         // Validación del código de acceso actual
-        if (!actual.getCodigoAcceso().equals(codigoActual)) {
+        if (actual.getCodigoAcceso() == null || !actual.getCodigoAcceso().equals(codigoActual)) {
             return new Respuesta(true, "El código de acceso actual es incorrecto", null);
         }
         
