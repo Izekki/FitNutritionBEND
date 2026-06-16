@@ -37,6 +37,10 @@ public class PacienteImp {
         SqlSession conexionBD = MybatisUtil.getSession();
         if (conexionBD != null) {
             try {
+                if (paciente.getCodigoAcceso() == null || paciente.getCodigoAcceso().trim().isEmpty() || paciente.getCodigoAcceso().equals("N/D") || paciente.getCodigoAcceso().equals("****")) {
+                    String nuevoCodigo = String.format("%04d", new java.util.Random().nextInt(10000));
+                    paciente.setCodigoAcceso(nuevoCodigo);
+                }
                 conexionBD.insert("paciente.insertar", paciente);
                 conexionBD.commit();
                 return paciente;
@@ -57,6 +61,19 @@ public class PacienteImp {
                 paciente.setIdPaciente(idPaciente);
                 // Recuperar estado actual para ver si cambió el médico asignado
                 Paciente actual = conexionBD.selectOne("paciente.obtenerPorId", idPaciente);
+                
+                // Si el cliente mandó "****" o "N/D", anularlo para no sobrescribir
+                if (paciente.getCodigoAcceso() != null && (paciente.getCodigoAcceso().equals("****") || paciente.getCodigoAcceso().equals("N/D"))) {
+                    paciente.setCodigoAcceso(null);
+                }
+
+                // Si no hay PIN en la BD y tampoco se envió uno nuevo válido, asignamos uno al azar
+                if (actual != null && (actual.getCodigoAcceso() == null || actual.getCodigoAcceso().trim().isEmpty())) {
+                    if (paciente.getCodigoAcceso() == null || paciente.getCodigoAcceso().trim().isEmpty()) {
+                        String nuevoCodigo = String.format("%04d", new java.util.Random().nextInt(10000));
+                        paciente.setCodigoAcceso(nuevoCodigo);
+                    }
+                }
                 
                 int filas = conexionBD.update("paciente.actualizar", paciente);
                 
